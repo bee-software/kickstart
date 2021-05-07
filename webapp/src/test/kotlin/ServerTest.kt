@@ -4,11 +4,14 @@ import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.containsSubstring
 import com.vtence.molecule.testing.http.HttpResponseAssert.assertThat
+import org.hamcrest.FeatureMatcher
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.net.http.HttpResponse.*
 
 class ServerTest {
     val server = Server("localhost", 19999)
@@ -60,5 +63,23 @@ class ServerTest {
                 containsSubstring("\"GET /status HTTP/1.1\" 200")
             )
         )
+    }
+
+    @Test
+    fun `renders static assets`() {
+        val response = client.send(request.GET(server.resolve("/favicon.ico")), BodyHandlers.ofByteArray())
+
+        assertThat(response).isOK
+            .hasContentType("image/x-icon")
+            .isNotChunked
+            .hasHeader("Content-Length", "15086")
+    }
+
+    @Test
+    fun `renders dynamic content as html utf 8 encoded`() {
+        val response = client.send(request.GET(server.resolve("/")))
+
+        assertThat(response).isOK
+            .hasContentType("text/html; charset=utf-8")
     }
 }

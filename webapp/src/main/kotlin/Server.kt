@@ -1,12 +1,11 @@
 package kickstart
 
 import com.natpryce.konfig.Configuration
-import com.vtence.molecule.Response
-import com.vtence.molecule.WebServer
-import com.vtence.molecule.middlewares.ApacheCommonLogger
-import com.vtence.molecule.middlewares.DateHeader
-import com.vtence.molecule.middlewares.ServerHeader
+import com.vtence.molecule.*
+import com.vtence.molecule.middlewares.*
 import java.net.URI
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Clock
 import java.util.*
 import java.util.logging.Level
@@ -27,10 +26,8 @@ class Server(host: String, port: Int) {
             .add(ServerHeader("Simple/6.0.1"))
             .add(DateHeader(Clock.systemDefaultZone()))
             .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), Locale.CANADA))
-            .start(draw {
-                get("/status").to { Response.ok().done("All green.") }
-                get("/").to { Response.ok().done("It works!") }
-            })
+            .add(staticAssets(Paths.get(config[Settings.www.root])))
+            .start(WebApp(config))
     }
 
     fun stop() {
@@ -44,4 +41,13 @@ class Server(host: String, port: Int) {
 
 
 fun Server.resolve(path: String) = resolve(URI.create(path))
+
+private fun staticAssets(root: Path) = assets(root.resolve("assets")) {
+    serve("/favicon", "/apple-touch-icon", "/safari-pinned-tab", "/android-chrome")
+    serve("/css")
+    serve("/fomantic")
+}
+
+
+
 

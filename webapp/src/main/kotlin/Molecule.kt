@@ -3,11 +3,14 @@ package kickstart
 import com.vtence.molecule.Application
 import com.vtence.molecule.Middleware
 import com.vtence.molecule.MiddlewareStack
+import com.vtence.molecule.middlewares.FileServer
 import com.vtence.molecule.middlewares.FilterMap
 import com.vtence.molecule.middlewares.Router
+import com.vtence.molecule.middlewares.StaticAssets
 import com.vtence.molecule.routing.RouteBuilder
 import com.vtence.molecule.routing.RouteSet
 import com.vtence.molecule.routing.Routes
+import java.nio.file.Path
 
 
 fun stack(builder: MiddlewareStack.() -> Unit): Application = MiddlewareStack().apply(builder).boot()
@@ -30,3 +33,5 @@ private class CombinedRoutes(private val first: RouteBuilder, private val second
         second.build(routes)
     }
 }
+
+fun assets(path: Path, builder: StaticAssets.() -> Unit) = StaticAssets(FileServer(path.toFile())).apply(builder)

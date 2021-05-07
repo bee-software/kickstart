@@ -10,4 +10,8 @@ object Settings {
         val host by stringType
         val port by intType
     }
+
+    object www: PropertyGroup() {
+        val root by stringType
+    }
 }

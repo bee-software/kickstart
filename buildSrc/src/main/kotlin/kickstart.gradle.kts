@@ -70,6 +70,9 @@ dependencies {
     testkitImplementation(libs.hamkrest)
     testkitImplementation(libs.junit.api)
     testkitImplementation(libs.faker)
+    testkitImplementation(libs.mario)
+    testkitImplementation(libs.selenium.api)
+    testkitImplementation(libs.selenium.chromedriver)
 
     testkit(sourceSets["testkit"].output)
 }
