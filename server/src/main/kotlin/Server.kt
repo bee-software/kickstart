@@ -1,10 +1,14 @@
 package kickstart
 
 import com.natpryce.konfig.Configuration
+import com.vtence.molecule.Application
+import com.vtence.molecule.Response
 import com.vtence.molecule.WebServer
 import com.vtence.molecule.middlewares.ApacheCommonLogger
+import com.vtence.molecule.middlewares.Cookies
 import com.vtence.molecule.middlewares.DateHeader
 import com.vtence.molecule.middlewares.ServerHeader
+import kickstart.i18n.LocaleSelector
 import java.net.URI
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -29,7 +33,14 @@ class Server(host: String, port: Int) {
             .add(DateHeader(Clock.systemDefaultZone()))
             .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), Locale.CANADA))
             .add(staticAssets(Paths.get(config[Settings.www.root])))
+            .mount("/status", diagnostics())
+            .add(Cookies())
+            .add(LocaleSelector.usingDefaultLocale(Locale.CANADA))
             .start(WebApp(config))
+    }
+
+    private fun diagnostics(): Application = Application {
+        Response.ok().contentType("text/plain").done("All green.")
     }
 
     fun stop() {

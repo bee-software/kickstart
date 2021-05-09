@@ -3,6 +3,7 @@ package kickstart
 import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.containsSubstring
+import com.vtence.molecule.http.HeaderNames
 import com.vtence.molecule.testing.http.HttpResponseAssert.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -75,9 +76,16 @@ class ServerTest {
 
     @Test
     fun `renders dynamic content as html utf 8 encoded`() {
-        val response = client.send(request.GET(server.resolve("/")))
+        val response = client.send(request.GET(server.resolve("/en")))
 
         assertThat(response).isOK
             .hasContentType("text/html; charset=utf-8")
+    }
+
+    @Test
+    fun `redirects to localized urls`() {
+        val response = client.send(request.GET(server.resolve("/")))
+
+        assertThat(response).hasHeader(HeaderNames.LOCATION, "/en")
     }
 }

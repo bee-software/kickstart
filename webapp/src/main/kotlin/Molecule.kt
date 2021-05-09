@@ -3,6 +3,7 @@ package kickstart
 import com.vtence.molecule.Application
 import com.vtence.molecule.Middleware
 import com.vtence.molecule.MiddlewareStack
+import com.vtence.molecule.Request
 import com.vtence.molecule.middlewares.FileServer
 import com.vtence.molecule.middlewares.FilterMap
 import com.vtence.molecule.middlewares.Router
@@ -33,5 +34,7 @@ private class CombinedRoutes(private val first: RouteBuilder, private val second
         second.build(routes)
     }
 }
+
+inline fun <reified T> Request.attribute() : T = this.attribute(T::class.java)
 
 fun assets(path: Path, builder: StaticAssets.() -> Unit) = StaticAssets(FileServer(path.toFile())).apply(builder)
