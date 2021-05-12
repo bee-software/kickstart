@@ -11,9 +11,7 @@ import com.vtence.molecule.middlewares.ServerHeader
 import kickstart.i18n.LocaleSelector
 import java.net.URI
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.time.Clock
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -31,11 +29,11 @@ class Server(host: String, port: Int) {
         webServer.failureReporter(this::errorLogger)
             .add(ServerHeader("Simple/6.0.1"))
             .add(DateHeader(Clock.systemDefaultZone()))
-            .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), Locale.CANADA))
-            .add(staticAssets(Paths.get(config[Settings.www.root])))
+            .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), config[Settings.www.lang]))
+            .add(staticAssets(config[Settings.www.root]))
             .mount("/status", diagnostics())
             .add(Cookies())
-            .add(LocaleSelector.usingDefaultLocale(Locale.CANADA))
+            .add(LocaleSelector.usingDefaultLocale(config[Settings.www.lang]))
             .start(WebApp(config))
     }
 

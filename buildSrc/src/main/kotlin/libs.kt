@@ -21,6 +21,8 @@ object libs {
 
     val molecule = "com.vtence.molecule:molecule:0.15.0-SNAPSHOT"
 
+    val skrapeit = "it.skrape:skrapeit:1.1.1"
+
     object selenium {
         val api = "org.seleniumhq.selenium:selenium-api:${versions.selenium}"
         val chromedriver = "org.seleniumhq.selenium:selenium-chrome-driver:${versions.selenium}"

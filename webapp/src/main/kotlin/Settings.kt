@@ -1,6 +1,11 @@
 package kickstart
 
 import com.natpryce.konfig.*
+import java.nio.file.Paths
+import java.util.*
+
+val localeType = propertyType { ParseResult.Success(Locale.forLanguageTag(it)) }
+val pathType = propertyType { ParseResult.Success(Paths.get(it)) }
 
 object Settings {
     val env by stringType
@@ -12,6 +17,7 @@ object Settings {
     }
 
     object www: PropertyGroup() {
-        val root by stringType
+        val root by pathType
+        val lang by localeType
     }
 }

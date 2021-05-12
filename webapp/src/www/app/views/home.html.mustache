@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{lang}}">
 <head>
     <!-- Standard Meta -->
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="theme-color" content="#ffffff">
 
-    <title>Homepage - Kickstart</title>
+    <title>{{#t}}heading.page{{/t}} - Kickstart</title>
 
     <link rel="stylesheet" type="text/css" href="/fomantic-2.8.7/semantic.min.css">
     <script src="/fomantic-2.8.7/semantic.min.js"></script>
@@ -23,18 +23,20 @@
 <body>
 <main class="ui inverted vertical center aligned segment">
     <div class="ui container">
-        <div class="ui large secondary inverted pointing menu">
-            <a class="active item">Home</a>
+        <menu class="ui large secondary inverted pointing menu">
+            <li class="active item">
+                <a>{{#t}}link.menu.home{{/t}}</a>
+            </li>
 
-            <div class="right item">
-                <a class="ui inverted button">Log in</a>
-            </div>
-        </div>
+            <li class="right item">
+                <a class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
+            </li>
+        </menu>
     </div>
 
     <div class="ui text container">
-        <h1 class="ui inverted header">Let's get started</h1>
     </div>
+        <h1 class="ui inverted header">{{#t}}heading.splash{{/t}}</h1>
 </main>
 </body>
 </html>

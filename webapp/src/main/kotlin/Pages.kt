@@ -3,7 +3,6 @@ package kickstart
 import com.vtence.molecule.Response
 import com.vtence.molecule.templating.JMustacheRenderer
 import com.vtence.molecule.templating.Templates
-import java.io.File
 import java.nio.file.Path
 
 
@@ -11,11 +10,15 @@ fun interface View<in T : Any> {
     fun render(model: T): Response
 }
 
-class Pages(folder: File)  {
+interface Views {
+    fun <T : Any> named(name: String): View<T>
+}
 
-    private val templates: Templates = Templates(JMustacheRenderer.fromDir(folder).nullValue(""))
+class Pages(folder: Path): Views  {
 
-    fun <T : Any> named(name: String): View<T> {
+    private val templates: Templates = Templates(JMustacheRenderer.fromDir(folder.toFile()).nullValue(""))
+
+    override fun <T : Any> named(name: String): View<T> {
         return View {
             val template = templates.named<T>("$name.html")
 
@@ -26,6 +29,8 @@ class Pages(folder: File)  {
     }
 
     companion object {
-        fun inDir(folder: Path) = Pages(folder.toFile())
+        fun inDir(folder: Path) = Pages(folder)
     }
 }
+
+fun pages(root: Path) = Pages(root.resolve("app").resolve("views"))

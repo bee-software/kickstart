@@ -7,6 +7,8 @@ dependencies {
     implementation(libs.konfig)
     implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
 
-    testRuntime(libs.hamcrest.library)
+    testkitImplementation(libs.skrapeit)
     testkitImplementation(libs.hamkrest)
+
+    testRuntime(libs.hamcrest.library)
 }
