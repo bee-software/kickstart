@@ -1,0 +1,17 @@
+---
+resources:
+  - name: sources
+    icon: github
+    type: git
+    source:
+      uri: https://github.com/bee-software/kickstart.git
+      branch: master
+
+jobs:
+  - name: build
+    public: true
+    plan:
+      - get: sources
+        trigger: true
+      - task: run-build
+        file: sources/ci/build.yml
