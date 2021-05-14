@@ -1,6 +1,7 @@
 plugins {
     id("kickstart")
     application
+    id("com.google.cloud.tools.jib")
 }
 
 application {

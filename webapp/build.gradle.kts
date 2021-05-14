@@ -12,3 +12,8 @@ dependencies {
 
     testRuntime(libs.hamcrest.library)
 }
+
+tasks.jar {
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+}

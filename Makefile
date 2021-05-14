@@ -17,4 +17,4 @@ run:
 
 docker-image:
 	@echo "Building image ${VERSION}..."
-	@./gradlew -Pversion=${VERSION} -p server jibDockerBuild
+	@./gradlew -Pversion=${VERSION} jibDockerBuild

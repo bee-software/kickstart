@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
-    id("com.google.cloud.tools.jib")
 }
 
 val buildNumber by extra("0")
