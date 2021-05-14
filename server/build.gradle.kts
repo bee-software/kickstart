@@ -1,5 +1,10 @@
 plugins {
     id("kickstart")
+    application
+}
+
+application {
+    mainClass.set("kickstart.CLI")
 }
 
 dependencies {
@@ -13,4 +18,24 @@ dependencies {
     testRuntime(libs.juniversalchardet)
     testRuntime(libs.simple)
     testkitImplementation(libs.hamkrest)
+}
+
+jib {
+    from {
+        image = "openjdk:16-alpine"
+    }
+    to {
+        image = "bee-software/kickstart"
+        tags = setOf("$version", "$version.${extra["buildNumber"]}")
+    }
+
+    extraDirectories {
+        paths {
+            path {
+                // copies the contents of www.root into '/www' on the container
+                setFrom("../webapp/src/www")
+                into = "/www"
+            }
+        }
+    }
 }

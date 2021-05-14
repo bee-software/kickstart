@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
+    id("com.google.cloud.tools.jib")
 }
 
-group = "software.bee.kickstart"
-version = if (project.hasProperty("version")) project.property("version") as String else "dev"
+val buildNumber by extra("0")
 
 repositories {
     mavenCentral()
