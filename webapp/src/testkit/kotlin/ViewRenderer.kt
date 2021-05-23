@@ -1,9 +1,10 @@
+package kickstart
+
 import com.vtence.molecule.testing.BodyContent
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
-import kickstart.i18n.LocalizedContent
+import kickstart.i18n.Localized
 import kickstart.i18n.i18n
-import kickstart.pages
 import java.nio.file.Path
 import java.util.*
 
@@ -14,7 +15,7 @@ class ViewRenderer<in T : Any>(from: Path) {
 
     fun render(template: String, context: T): Doc {
         val locale = when(context) {
-            is LocalizedContent -> context.locale
+            is Localized -> context.translations.locale
             else -> Locale.getDefault()
         }
 

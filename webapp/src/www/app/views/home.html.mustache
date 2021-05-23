@@ -13,7 +13,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="theme-color" content="#ffffff">
 
-    <title>{{#t}}heading.page{{/t}} - Kickstart</title>
+    <title>{{#t}}heading.page{{/t}}</title>
 
     <link rel="stylesheet" type="text/css" href="/fomantic-2.8.7/semantic.min.css">
     <script src="/fomantic-2.8.7/semantic.min.js"></script>
@@ -23,13 +23,13 @@
 <body>
 <main class="ui inverted vertical center aligned segment">
     <div class="ui container">
-        <menu class="ui large secondary inverted pointing menu">
+        <menu class="ui large top secondary inverted pointing menu">
             <li class="active item">
-                <a>{{#t}}link.menu.home{{/t}}</a>
+                <a href="/{{lang}}">{{#t}}link.menu.home{{/t}}</a>
             </li>
 
-            <li class="right item">
-                <a class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
+            <li id="login" class="right item">
+                <a href="/{{lang}}/login" class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
             </li>
         </menu>
     </div>

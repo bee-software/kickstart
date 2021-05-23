@@ -1,41 +1,41 @@
 package kickstart
 
-import Expectations
 import it.skrape.matchers.toBe
 import it.skrape.matchers.toContain
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.main
 import it.skrape.selects.html5.menu
-import kickstart.i18n.LocalizedContent
+import kickstart.i18n.Translations
 import org.junit.jupiter.api.Test
-import renderView
+import java.util.*
 
 class HomePageTest {
 
     @Test
     fun `is localized`() {
-        render(LocalizedContent()) {
+        render(Home(Translations(Locale.ENGLISH))) {
             eachAttribute("lang") toContain "en"
         }
     }
 
     @Test
     fun `has title`() {
-        render(LocalizedContent()) {
-            titleText toBe "Homepage - Kickstart"
+        render() {
+            titleText toBe "Kickstart"
         }
     }
 
     @Test
     fun `links back home`() {
-        render(LocalizedContent()) {
+        render() {
             main {
                 menu {
                     "li.active" {
                         a {
                             findFirst {
                                 text toBe "Home"
+                                attribute("href") toBe "/en"
                             }
                         }
                     }
@@ -46,13 +46,14 @@ class HomePageTest {
 
     @Test
     fun `links to login`() {
-        render(LocalizedContent()) {
+        render() {
             main {
                 menu {
                     a {
                         withClass = "button"
                         findFirst {
                             text toBe "Log in"
+                            attribute("href") toBe "/en/login"
                         }
                     }
                 }
@@ -60,7 +61,7 @@ class HomePageTest {
         }
     }
 
-    private fun render(content: LocalizedContent, expectations: Expectations): Doc {
+    private fun render(content: Home = Home(), expectations: Expectations): Doc {
         return renderView("home", content, expectations)
     }
 }

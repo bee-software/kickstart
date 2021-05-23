@@ -37,4 +37,8 @@ private class CombinedRoutes(private val first: RouteBuilder, private val second
 
 inline fun <reified T> Request.attribute() : T = this.attribute(T::class.java)
 
+operator fun Request.get(name: String): String? = this.parameter(name)
+
+operator fun Request.set(name: String, value: String): Request = this.addParameter(name, value)
+
 fun assets(path: Path, builder: StaticAssets.() -> Unit) = StaticAssets(FileServer(path.toFile())).apply(builder)

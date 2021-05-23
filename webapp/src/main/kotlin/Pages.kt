@@ -24,7 +24,7 @@ class Pages(folder: Path): Views  {
 
             Response.ok()
                 .contentType("text/html; charset=utf-8")
-                .done(template.render(it))
+                .body(template.render(it))
         }
     }
 

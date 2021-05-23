@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <link rel="stylesheet" type="text/css" href="/fomantic-2.8.7/semantic.min.css">
+    <script src="/fomantic-2.8.7/semantic.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/kickstart.css">
+</head>
+<body>
+
+<main class="ui inverted middle aligned center aligned grid">
+    <div class="four wide left aligned column">
+        <header class="ui large inverted center aligned header">
+            <h2 class="content">{{#t}}heading.page{{/t}}</h2>
+        </header>
+        <form id="login" class="ui large secondary inverted form" action="/login" method="post">
+            <div class="ui basic padded segment">
+                <div class="field">
+                    <label for="username">{{#t}}label.user.name{{/t}}</label>
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="username" autofocus/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="password">{{#t}}label.user.password{{/t}}</label>
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password"/>
+                    </div>
+                </div>
+                <button class="ui large fluid positive button">
+                    {{#t}}button.login{{/t}}
+                </button>
+            </div>
+
+            <output id="errors"></output>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

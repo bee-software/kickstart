@@ -1,5 +1,6 @@
-main.segment {
-    min-height: 1200px;
+main.ui.segment, main.ui.grid {
+    margin-top: 0;
+    min-height: 100%;
     padding: 1em 0;
 }
 
@@ -8,4 +9,14 @@ main.segment h1.ui.header {
     margin-bottom: 0;
     font-size: 4em;
     font-weight: normal;
+}
+
+.ui.inverted.grid, .ui.primary.inverted.grid {
+    background: #1b1c1d;
+    color: rgba(255,255,255,.9);
+}
+
+.ui.inverted.grid .ui.inverted.form {
+    background-color: #333333;
+    color: #fff;
 }
