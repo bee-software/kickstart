@@ -1,10 +1,13 @@
 package kickstart.storytelling
 
-class Info<out T>(private val type: Class<T>) {
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
-    fun cast(value: Any) = type.cast(value)
+class Info<out T: Any>(private val type: KClass<T>) {
+
+    fun cast(value: Any): T = type.cast(value)
 
     companion object {
-        inline fun <reified T> create() = Info(T::class.java)
+        inline fun <reified T: Any> create() = Info(T::class)
     }
 }
