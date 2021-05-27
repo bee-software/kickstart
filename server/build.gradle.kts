@@ -13,11 +13,11 @@ dependencies {
     implementation(libs.konfig)
     implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
 
-    runtime(libs.simple)
+    runtimeOnly(libs.simple)
 
-    testRuntime(libs.hamcrest.library)
-    testRuntime(libs.juniversalchardet)
-    testRuntime(libs.simple)
+    testRuntimeOnly(libs.hamcrest.library)
+    testRuntimeOnly(libs.juniversalchardet)
+    testRuntimeOnly(libs.simple)
     testkitImplementation(libs.hamkrest)
 }
 

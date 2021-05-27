@@ -10,7 +10,7 @@ dependencies {
     testkitImplementation(libs.skrapeit)
     testkitImplementation(libs.hamkrest)
 
-    testRuntime(libs.hamcrest.library)
+    testRuntimeOnly(libs.hamcrest.library)
 }
 
 tasks.jar {
