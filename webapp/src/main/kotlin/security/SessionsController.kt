@@ -3,7 +3,6 @@ package kickstart.security
 import com.vtence.molecule.Request
 import com.vtence.molecule.Response
 import kickstart.View
-import kickstart.get
 
 class SessionsController(
     private val authenticator: Authenticator,
@@ -11,19 +10,19 @@ class SessionsController(
 ) {
 
     fun new(request: Request): Response {
-        return view.render(Login()).done()
+        return view.render(Login.empty).done()
     }
 
     fun create(request: Request): Response {
-        val user = authenticate(request["username"], request["password"])
-
+        val form: LoginForm = LoginForm.parse(request)
+        val user = authenticate(form)
         if (user == null) {
-            return view.render(Login(request["username"])).done()
+            return view.render(Login.invalid(form.username)).done()
         }
 
         return Response.redirect("/").done()
     }
 
-    private fun authenticate(username: String?, password: String?) =
-        authenticator.authenticate(*listOfNotNull(username, password).toTypedArray())
+    private fun authenticate(form: LoginForm) =
+        authenticator.authenticate(*form.credentials)
 }

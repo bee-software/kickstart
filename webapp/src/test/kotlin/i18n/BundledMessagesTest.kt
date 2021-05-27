@@ -15,7 +15,7 @@ class BundledMessagesTest {
 
     @Test
     fun `loads translations in specified locale`() {
-        val translations = bundles.loadBundle("defaults", Locale.FRENCH)
+        val translations = bundles.loadBundle("", "defaults", Locale.FRENCH)
         assertThat(
             "translated value", translations.interpolate("app.value"),
             equalTo("valeur par défaut")
@@ -24,7 +24,7 @@ class BundledMessagesTest {
 
     @Test
     fun `composes view translations`() {
-        val translations = bundles.at(Paths.get("views")).loadBundle("model/page", Locale.ENGLISH)
+        val translations = bundles.loadBundle("views", "model/page", Locale.ENGLISH)
 
         assertThat(
             "page value", translations.interpolate("page.value"),
@@ -53,13 +53,13 @@ class BundledMessagesTest {
 
     @Test
     fun `ignores missing bundles`() {
-        val translations = bundles.loadBundle("missing", Locale.ENGLISH)
+        val translations = bundles.loadBundle("", "missing", Locale.ENGLISH)
 
         assertThrows<MissingResourceException> {  translations.interpolate("key") }
     }
 
     private fun lookupValueIn(bundleName: String): String {
-        val translations = bundles.at(Paths.get("views")).loadBundle(bundleName, Locale.ENGLISH)
+        val translations = bundles.loadBundle("views", bundleName, Locale.ENGLISH)
         return translations.interpolate("value")
     }
 }

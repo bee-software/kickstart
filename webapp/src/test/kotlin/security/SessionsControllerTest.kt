@@ -1,14 +1,11 @@
 package kickstart.security
 
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.has
-import com.natpryce.hamkrest.present
 import com.vtence.molecule.Request.get
 import com.vtence.molecule.Request.post
 import com.vtence.molecule.http.HttpStatus
 import com.vtence.molecule.testing.ResponseAssert.assertThat
 import kickstart.TestView
-import kickstart.ViewAssert.Companion.assertThat
+import kickstart.and
 import kickstart.set
 import org.junit.jupiter.api.Test
 
@@ -26,8 +23,10 @@ class SessionsControllerTest {
     fun `renders login page to open session`() {
         val response = sessions.new(get("/"))
 
-        assertThat(view).renderedWith(present())
-        assertThat(response).hasStatus(HttpStatus.OK).isDone
+        assertThat(response)
+            .hasStatus(HttpStatus.OK)
+            .isDone and
+                view renderedWith Login.empty
     }
 
     @Test
@@ -41,13 +40,15 @@ class SessionsControllerTest {
     }
 
     @Test
-    fun `renders form errors when form is invalid`() {
+    fun `renders form errors when authentication fails`() {
         fillForm("chris", "wrong secret")
 
         val response = sessions.create(request)
 
-        assertThat(view).renderedWith(has(Login::username, equalTo("chris")))
-        assertThat(response).hasStatus(HttpStatus.OK).isDone
+        assertThat(response)
+            .hasStatus(HttpStatus.OK)
+            .isDone and
+                view renderedWith Login.invalid("chris")
     }
 
     private fun fillForm(username: String, password: String) {

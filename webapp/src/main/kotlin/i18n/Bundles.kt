@@ -2,15 +2,29 @@ package kickstart.i18n
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.text.MessageFormat
 import java.util.*
+
+class MessageBundle(private val bundle: ResourceBundle) : Messages {
+
+    override fun interpolate(key: String, vararg args: Any): String {
+        val formatter = MessageFormat(bundle.getString(key), bundle.locale)
+        return formatter.format(args)
+    }
+
+    companion object {
+        fun load(bundleName: String, locale: Locale) = MessageBundle(ResourceBundle.getBundle(bundleName, locale))
+    }
+}
+
 
 class BundledMessages(private val root: Path) {
 
     fun at(path: Path): BundledMessages = BundledMessages(resolve(path))
 
     fun load(path: Path, locale: Locale): Messages {
-        val messages = compose(loadBundle(resolve(path), locale),
-                loadBundle(resolve(path.resolveSibling("defaults")), locale))
+        val messages = loadBundle(resolve(path), locale) +
+                loadBundle(resolve(path.resolveSibling("defaults")), locale)
 
         return path.parent?.let { messages + load(it, locale) } ?: messages
     }
@@ -30,9 +44,8 @@ class BundledMessages(private val root: Path) {
     }
 }
 
-fun BundledMessages.at(path: String) = at(Paths.get(path))
-
-fun BundledMessages.loadBundle(name: String, locale: Locale) = load(Paths.get(name), locale)
+fun BundledMessages.loadBundle(path: String, name: String, locale: Locale) =
+    at(Paths.get(path)).load(Paths.get(name), locale)
 
 
 private fun notAvailable(bundlePath: Path, locale: Locale): Messages {

@@ -6,7 +6,6 @@ import it.skrape.selects.Doc
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.main
 import it.skrape.selects.html5.menu
-import kickstart.i18n.Translations
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -14,8 +13,8 @@ class HomePageTest {
 
     @Test
     fun `is localized`() {
-        render(Home(Translations(Locale.ENGLISH))) {
-            eachAttribute("lang") toContain "en"
+        render(locale = Locale.FRENCH) {
+            eachAttribute("lang") toContain "fr"
         }
     }
 
@@ -61,7 +60,7 @@ class HomePageTest {
         }
     }
 
-    private fun render(content: Home = Home(), expectations: Expectations): Doc {
-        return renderView("home", content, expectations)
+    private fun render(content: Home = Home(), locale: Locale = Locale.getDefault(), expectations: Expectations): Doc {
+        return renderView("home", content, locale, expectations)
     }
 }

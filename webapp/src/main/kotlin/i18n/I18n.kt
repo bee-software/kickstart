@@ -17,12 +17,13 @@ class I18n(private val supportedLocales: Set<Locale>, location: String) {
         return object : Views {
             override fun <T : Any> named(name: String): View<T> {
                 return View { content ->
-                    val view: View<T> = views.named(name)
-                    if (content is Localized) {
-                        val translations = messages.at("views").loadBundle(name, locale)
-                        content.translations = Translations(locale, alternativeLocales(locale), translations)
+                    val view = views.named<Any>(name)
+                    if (content is I18ned) {
+                        val translations = messages.loadBundle("views", name, locale)
+                        view.render(content.localize(Translations(locale, alternativeLocales(locale), translations)))
+                    } else {
+                        view.render(content)
                     }
-                    view.render(content)
                 }
             }
         }

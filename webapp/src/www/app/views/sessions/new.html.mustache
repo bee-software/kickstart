@@ -17,13 +17,25 @@
         <header class="ui large inverted center aligned header">
             <h2 class="content">{{#t}}heading.page{{/t}}</h2>
         </header>
-        <form id="login" class="ui large secondary inverted form" action="/login" method="post">
+        <form id="login" class="ui large secondary inverted form {{#errors.login}}{{#-first}}error{{/-first}}{{/errors.login}}" action="/login" method="post">
             <div class="ui basic padded segment">
+                {{#errors.login.credentials}}
+                    {{#-first}}
+                    <div class="ui inverted error message">
+                    <ul class="list">
+                    {{/-first}}
+                    <li>{{.}}</li>
+                    {{#-last}}
+                    </ul>
+                    </div>
+                    {{/-last}}
+                {{/errors.login.credentials}}
+
                 <div class="field">
                     <label for="username">{{#t}}label.user.name{{/t}}</label>
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="username" autofocus/>
+                        <input type="text" name="username" autofocus value="{{username}}"/>
                     </div>
                 </div>
                 <div class="field">
@@ -37,8 +49,6 @@
                     {{#t}}button.login{{/t}}
                 </button>
             </div>
-
-            <output id="errors"></output>
         </form>
     </div>
 </main>
