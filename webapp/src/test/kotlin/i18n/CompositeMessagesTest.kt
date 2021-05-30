@@ -1,28 +1,22 @@
 package kickstart.i18n
 
+import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.util.*
 
 class CompositeMessagesTest {
 
     @Test
     fun `starts as empty`() {
-        assertThrows<MissingResourceException> { compose().interpolate("key") }
+        val composite = compose()
+
+        assertThat("any message", composite.interpolate("message"), absent())
     }
 
     @Test
     fun `looks up translation in all composed messages`() {
-        val composite =
-            Messages { message, _ ->
-                throw MissingResourceException(
-                    message,
-                    null,
-                    message
-                )
-            } + Messages { _, _ -> "translation" }
+        val composite = noMessages + Messages { _, _ -> "translation" }
 
         assertThat("translated message", composite.interpolate("message"), equalTo("translation"))
     }

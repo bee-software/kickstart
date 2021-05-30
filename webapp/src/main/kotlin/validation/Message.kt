@@ -1,11 +1,6 @@
 package kickstart.validation
 
-import kickstart.i18n.Messages
-
-
-typealias Lookup = (String, Array<out Any>) -> String
-
-val Messages.lookup get() = this::interpolate
+import kickstart.i18n.Lookup
 
 
 typealias Args = (String, Lookup) -> String
@@ -18,4 +13,8 @@ data class Message(val key: String, private val args: Args = noArgs) {
     }
 }
 
-val noArgs: Args = { key, lookup -> lookup(key, arrayOf()) }
+val noArgs = object : Args {
+    override fun invoke(key: String, lookup: Lookup) = lookup(key, arrayOf())
+
+    override fun toString() = "none"
+}

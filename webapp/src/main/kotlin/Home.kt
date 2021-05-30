@@ -2,8 +2,8 @@ package kickstart
 
 import kickstart.i18n.I18ned
 import kickstart.i18n.LocalizedMessages
+import kickstart.i18n.interpolation
 import kickstart.i18n.noMessages
-import kickstart.validation.interpolation
 
 
 data class Home(private val messages: LocalizedMessages = noMessages): I18ned {

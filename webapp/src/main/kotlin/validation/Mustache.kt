@@ -1,19 +1,7 @@
 package kickstart.validation
 
 import com.samskivert.mustache.Mustache
-import com.samskivert.mustache.Template
-import kickstart.i18n.Messages
-import java.io.Writer
-
-
-class Interpolation(private val lookup: Lookup) : Mustache.Lambda {
-
-    override fun execute(frag: Template.Fragment, out: Writer) {
-        out.write(lookup(frag.execute().trim { it <= ' ' }, arrayOf()))
-    }
-}
-
-val Messages.interpolation get() = Interpolation(lookup)
+import kickstart.i18n.Lookup
 
 
 class ErrorMessages(

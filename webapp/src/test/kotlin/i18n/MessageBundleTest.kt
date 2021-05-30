@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 import java.util.*
 
 class MessageBundleTest {
-    val messages: Messages = MessageBundle(object : ListResourceBundle() {
+    val messages = MessageBundle(object : ListResourceBundle() {
         override fun getContents(): Array<Array<Any>> {
             return arrayOf(
                 arrayOf("required", "is required"),

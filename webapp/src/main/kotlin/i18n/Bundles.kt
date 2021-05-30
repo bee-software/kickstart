@@ -5,35 +5,45 @@ import java.nio.file.Paths
 import java.text.MessageFormat
 import java.util.*
 
-class MessageBundle(private val bundle: ResourceBundle) : Messages {
+
+class MessageBundle(
+    private val bundle: ResourceBundle,
+    private val location: Location = Location.intrinsic()
+) : Messages {
 
     override fun interpolate(key: String, vararg args: Any): String {
         val formatter = MessageFormat(bundle.getString(key), bundle.locale)
         return formatter.format(args)
     }
 
+    override fun searchPath(key: String) = listOf(MessageLocation(key, location))
+
     companion object {
-        fun load(bundleName: String, locale: Locale) = MessageBundle(ResourceBundle.getBundle(bundleName, locale))
+        fun load(path: Path, locale: Locale): MessageBundle {
+            val bundle = ResourceBundle.getBundle(path.toString(), locale)
+            return MessageBundle(bundle, Location(bundle.description, path.toUri()))
+        }
     }
 }
 
+val ResourceBundle.description get() =
+    "bundle $baseBundleName in ${locale.toLanguageTag()}"
+
+val <T> List<T>.head: T
+    get() = first()
+
+val <T> List<T>.tail: List<T>
+    get() = drop(1)
+
 
 class BundledMessages(private val root: Path) {
-
     fun at(path: Path): BundledMessages = BundledMessages(resolve(path))
 
     fun load(path: Path, locale: Locale): Messages {
-        val messages = loadBundle(resolve(path), locale) +
-                loadBundle(resolve(path.resolveSibling("defaults")), locale)
+        val loadPaths = path.runningFold(root) { dir, name -> dir.resolve(name) }.asReversed()
 
-        return path.parent?.let { messages + load(it, locale) } ?: messages
-    }
-
-    private fun loadBundle(path: Path, locale: Locale): Messages {
-        return try {
-            MessageBundle.load(path.toString(), locale)
-        } catch (e: MissingResourceException) {
-            notAvailable(path, locale)
+        return loadPaths.tail.fold(loadBundle(loadPaths.head, locale)) { composition, dir ->
+            composition + loadBundle(dir.resolve("defaults"), locale)
         }
     }
 
@@ -48,12 +58,18 @@ fun BundledMessages.loadBundle(path: String, name: String, locale: Locale) =
     at(Paths.get(path)).load(Paths.get(name), locale)
 
 
-private fun notAvailable(bundlePath: Path, locale: Locale): Messages {
-    return Messages { message, _ ->
-        throw MissingResourceException(
-            "Can't find resource bundle for path $bundlePath and locale $locale",
-            bundlePath.toString(),
-            message
-        )
+private fun loadBundle(path: Path, locale: Locale): Messages {
+    return runCatching {
+        MessageBundle.load(path, locale)
+    }.getOrElse {
+        MessageBundle(EmptyResourceBundle,
+            Location("inexistant bundle $path in ${locale.toLanguageTag()}"))
     }
+}
+
+
+object EmptyResourceBundle : ResourceBundle() {
+    override fun handleGetObject(key: String) = null
+
+    override fun getKeys(): Enumeration<String> = Collections.emptyEnumeration()
 }

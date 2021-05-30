@@ -1,12 +1,10 @@
 package i18n
 
+import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
 import kickstart.i18n.BundledMessages
 import kickstart.i18n.loadBundle
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.nio.file.Paths
 import java.util.*
 
 class BundledMessagesTest {
@@ -16,6 +14,7 @@ class BundledMessagesTest {
     @Test
     fun `loads translations in specified locale`() {
         val translations = bundles.loadBundle("", "defaults", Locale.FRENCH)
+
         assertThat(
             "translated value", translations.interpolate("app.value"),
             equalTo("valeur par défaut")
@@ -42,6 +41,11 @@ class BundledMessagesTest {
 
     @Test
     fun `looks up translation keys, starting with most specific`() {
+        fun lookupValueIn(bundleName: String): String? {
+            val translations = bundles.loadBundle("views", bundleName, Locale.ENGLISH)
+            return translations.interpolate("value")
+        }
+
         assertThat("page value", lookupValueIn("model/page"), equalTo("page value"))
         assertThat(
             "model default value",
@@ -55,11 +59,22 @@ class BundledMessagesTest {
     fun `ignores missing bundles`() {
         val translations = bundles.loadBundle("", "missing", Locale.ENGLISH)
 
-        assertThrows<MissingResourceException> {  translations.interpolate("key") }
+        assertThat(translations.interpolate("key"), absent())
     }
 
-    private fun lookupValueIn(bundleName: String): String {
-        val translations = bundles.loadBundle("views", bundleName, Locale.ENGLISH)
-        return translations.interpolate("value")
+    @Test
+    fun `provides search locations`() {
+        val translations = bundles.loadBundle("views", "model/page", Locale.ENGLISH)
+
+        val locations = translations.searchPath("views.value")
+            .map { it.description }
+
+        assertThat(
+            locations,
+            allOf(
+                hasElement("bundle test/i18n/views/model/page in en"),
+                hasElement("bundle test/i18n/views/model/defaults in en"),
+                hasElement("bundle test/i18n/views/defaults in en"))
+        )
     }
 }
