@@ -1,5 +1,8 @@
 package kickstart
 
+import com.natpryce.hamkrest.allElements
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import it.skrape.matchers.toBe
 import it.skrape.matchers.toContain
 import it.skrape.selects.Doc
@@ -14,14 +17,14 @@ class HomePageTest {
     @Test
     fun `is localized`() {
         render(locale = Locale.FRENCH) {
-            eachAttribute("lang") toContain "fr"
+            eachAttribute("lang") should allElements(equalTo("fr"))
         }
     }
 
     @Test
     fun `has title`() {
         render() {
-            titleText toBe "Kickstart"
+            titleText shouldBe "Kickstart"
         }
     }
 
@@ -33,8 +36,8 @@ class HomePageTest {
                     "li.active" {
                         a {
                             findFirst {
-                                text toBe "Home"
-                                attribute("href") toBe "/en"
+                                text shouldBe "Home"
+                                attribute("href") shouldBe "/en"
                             }
                         }
                     }
@@ -51,8 +54,8 @@ class HomePageTest {
                     a {
                         withClass = "button"
                         findFirst {
-                            text toBe "Log in"
-                            attribute("href") toBe "/en/login"
+                            text shouldBe "Log in"
+                            attribute("href") shouldBe "/en/login"
                         }
                     }
                 }

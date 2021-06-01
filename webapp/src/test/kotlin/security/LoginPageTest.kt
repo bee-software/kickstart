@@ -1,14 +1,9 @@
 package kickstart.security
 
-import it.skrape.matchers.toBe
-import it.skrape.matchers.toContain
-import it.skrape.matchers.toNotContain
+import com.natpryce.hamkrest.containsSubstring
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.form
-import kickstart.Expectations
-import kickstart.errorLabelFor
-import kickstart.renderView
-import kickstart.value
+import kickstart.*
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -19,15 +14,15 @@ class LoginPageTest {
         render(Login.empty) {
             form("#login") {
                 findFirst {
-                    attribute("action") toBe "/login"
-                    attribute("method") toBe "post"
-                    className toNotContain "error"
+                    attribute("action") shouldBe "/login"
+                    attribute("method") shouldBe "post"
+                    className should !containsSubstring("error")
 
                     findFirst("input[name=username]") {
-                        value toBe ""
+                        value shouldBe ""
                     }
                     findFirst("input[name=password]") {
-                        value toBe ""
+                        value shouldBe ""
                     }
                 }
             }
@@ -39,17 +34,17 @@ class LoginPageTest {
         render(Login.invalid(username = "john")) {
             form {
                 findFirst {
-                    className toContain "error"
+                    className should containsSubstring("error")
                 }
 
                 "div.error.message" {
                     findFirst("li") {
-                        ownText toContain "invalid"
+                        ownText should containsSubstring("invalid")
                     }
                 }
 
                 findFirst("input[name=username]") {
-                    value toBe "john"
+                    value shouldBe "john"
                 }
             }
         }
@@ -64,22 +59,22 @@ class LoginPageTest {
         ) {
             form("#login") {
                 findFirst {
-                    className toContain "error"
+                    className should containsSubstring("error")
 
                     findFirst("input[name=username]") {
-                        value toBe "john"
+                        value shouldBe "john"
                     }
 
                     findFirst(errorLabelFor("username")) {
-                        text toBe "Please enter your username"
+                        text shouldBe "Please enter your username"
                     }
 
                     findFirst("input[name=password]") {
-                        value toBe ""
+                        value shouldBe ""
                     }
 
                     findFirst(errorLabelFor("password")) {
-                        text toBe "Please enter your password"
+                        text shouldBe "Please enter your password"
                     }
                 }
             }
