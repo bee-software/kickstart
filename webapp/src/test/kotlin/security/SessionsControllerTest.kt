@@ -7,7 +7,7 @@ import com.vtence.molecule.testing.ResponseAssert.assertThat
 import kickstart.TestView
 import kickstart.and
 import kickstart.set
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class SessionsControllerTest {
 

@@ -2,7 +2,7 @@ package kickstart.validation
 
 import com.natpryce.hamkrest.assertion.assertThat
 import kickstart.containsAll
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class ErrorMessagesTest {
     @Test

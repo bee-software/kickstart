@@ -2,7 +2,7 @@ package kickstart.validation
 
 import com.natpryce.hamkrest.assertion.assertThat
 import kickstart.isFailure
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class FailureTest {
     @Test

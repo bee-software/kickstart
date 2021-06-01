@@ -4,7 +4,7 @@ import com.natpryce.hamkrest.containsSubstring
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.form
 import kickstart.*
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import java.util.*
 
 class LoginPageTest {

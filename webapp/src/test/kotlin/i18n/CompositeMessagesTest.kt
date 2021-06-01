@@ -3,7 +3,7 @@ package kickstart.i18n
 import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class CompositeMessagesTest {
 

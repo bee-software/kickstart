@@ -4,11 +4,12 @@ import kickstart.models.Users
 import kickstart.storytelling.Actor
 import kickstart.storytelling.browsing.BrowseTheWeb
 import kickstart.tasks.signInAs
+import kickstart.tasks.signOut
 import kickstart.tasks.startUsing
 import kickstart.tasks.stopUsing
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class FeatureTest {
 
@@ -16,12 +17,12 @@ class FeatureTest {
 
     val actor = Actor.ableTo(BrowseTheWeb.withHisBrowser())
 
-    @BeforeEach
+    @BeforeTest
     fun start() {
         actor.does(startUsing(application))
     }
 
-    @AfterEach
+    @AfterTest
     fun stop() {
         actor.does(stopUsing(application))
     }

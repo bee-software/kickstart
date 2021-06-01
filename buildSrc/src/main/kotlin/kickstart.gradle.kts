@@ -74,6 +74,9 @@ dependencies {
     testkitImplementation(libs.selenium.chromedriver)
 
     testkit(sourceSets["testkit"].output)
+
+    testImplementation(kotlin("test"))
+
 }
 
 tasks.test {

@@ -2,8 +2,7 @@ package kickstart.validation
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.junit.jupiter.api.Test
-
+import kotlin.test.Test
 
 val foo by notBlank
 

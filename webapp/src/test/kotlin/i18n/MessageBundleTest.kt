@@ -2,9 +2,9 @@ package kickstart.i18n
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.ZoneOffset
+import kotlin.test.Test
 import java.util.*
 
 class MessageBundleTest {

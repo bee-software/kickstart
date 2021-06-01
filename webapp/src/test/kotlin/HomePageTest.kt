@@ -1,15 +1,13 @@
 package kickstart
 
+import kotlin.test.Test
+
 import com.natpryce.hamkrest.allElements
-import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import it.skrape.matchers.toBe
-import it.skrape.matchers.toContain
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.main
 import it.skrape.selects.html5.menu
-import org.junit.jupiter.api.Test
 import java.util.*
 
 class HomePageTest {
@@ -47,7 +45,7 @@ class HomePageTest {
     }
 
     @Test
-    fun `links to login`() {
+    fun `links to login, when not signed in`() {
         render() {
             main {
                 menu {

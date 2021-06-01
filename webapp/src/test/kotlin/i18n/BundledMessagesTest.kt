@@ -4,7 +4,7 @@ import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
 import kickstart.i18n.BundledMessages
 import kickstart.i18n.loadBundle
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import java.util.*
 
 class BundledMessagesTest {

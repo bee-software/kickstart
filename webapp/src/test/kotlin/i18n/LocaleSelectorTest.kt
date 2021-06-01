@@ -11,13 +11,13 @@ import com.vtence.molecule.testing.ResponseAssert.assertThat
 
 import kickstart.attribute
 import org.hamcrest.Matchers.*
-
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+
+import kotlin.test.Test
+import kotlin.test.BeforeTest
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.test.assertFails
 
 class LocaleSelectorTest {
     val selector = LocaleSelector.usingDefaultLocale("en-US")
@@ -25,7 +25,7 @@ class LocaleSelectorTest {
     val cookies = CookieJar()
     val request = Request.get("/")
 
-    @BeforeEach
+    @BeforeTest
     fun `attach cookie jar`() {
         cookies.bind(request)
     }
@@ -251,7 +251,7 @@ class LocaleSelectorTest {
                 .alsoSupporting("fr")
                 .then { throw Exception("Error!") }
 
-            assertThrows<Exception> { app.handle(request.path("/fr")) }
+            assertFails { app.handle(request.path("/fr")) }
 
             assertThat(request)
                 .hasNoAttribute(Locale::class.java)
