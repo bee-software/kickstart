@@ -1,13 +1,13 @@
 package kickstart.security
 
-import kickstart.i18n.I18ned
-import kickstart.i18n.LocalizedMessages
-import kickstart.i18n.noMessages
+import kickstart.i18n.*
 import kickstart.validation.*
+import kickstart.validation.ValidationResult.Failure
+import kickstart.validation.ValidationResult.Success
 
 data class Login(
     val username: String? = null,
-    private val errors: List<Message> = listOf(),
+    private val violations: List<Violation> = listOf(),
     private val messages: LocalizedMessages = noMessages
 ) : I18ned {
     val lang by messages::language
@@ -15,22 +15,33 @@ data class Login(
 
     override fun localize(messages: LocalizedMessages) = copy(messages = messages)
 
-    fun errors() = ErrorMessages(prefix = "errors", messages = errors, lookup = messages.lookup)
+    fun errors() = ErrorMessages(prefix = "errors", violations = violations, lookup = messages.lookup)
 
-    operator fun plus(error: Message) = copy(errors = errors + error)
+    operator fun plus(result: ValidationResult<*>) = when (result) {
+        is Success -> this
+        is Failure -> copy(violations = violations + result.violations)
+    }
 
     companion object {
         val empty = Login()
 
-        fun invalid(username: String?) = Login(username) + Errors.Login.Credentials.invalid
+        fun invalid(username: String?): Login = Login(username) + errors.login.credentials.invalid(username)
     }
 }
 
 
-object Errors : MessageKeys() {
-    object Login : MessageKeys() {
-        object Credentials : MessageKeys() {
-            val invalid by literal
+object errors : ValidationKeys() {
+    object login : ValidationKeys() {
+        object credentials : ValidationKeys() {
+            val invalid by failure
+        }
+
+        object username : ValidationKeys() {
+            val required by notBlank
+        }
+
+        object password : ValidationKeys() {
+            val required by notBlank
         }
     }
 }

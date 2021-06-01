@@ -1,0 +1,22 @@
+package kickstart
+
+import com.natpryce.hamkrest.Matcher
+import com.natpryce.hamkrest.cast
+import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.has
+import kickstart.validation.ValidationResult
+import kickstart.validation.Violation
+
+
+fun <T> containsAll(elements: Iterable<T>) = Matcher(Collection<T>::containsAll, elements.toList())
+
+fun <T> containsAll(vararg elements: T) = containsAll(elements.toList())
+
+
+fun <T> isFailure(matching: Matcher<List<Violation>>) =
+    cast(has(ValidationResult.Failure<T>::violations, matching))
+
+fun <T> isFailure(violations: List<Violation>) = isFailure<T>(equalTo(violations))
+
+fun <T> isFailure(vararg violations: Violation) = isFailure<T>(violations.toList())
+

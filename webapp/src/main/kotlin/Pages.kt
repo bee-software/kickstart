@@ -10,6 +10,9 @@ fun interface View<in T : Any> {
     fun render(model: T): Response
 }
 
+fun <T : Any> View<T>.done(result: T): Response = render(result).done()
+
+
 interface Views {
     fun <T : Any> named(name: String): View<T>
 }

@@ -40,7 +40,7 @@ class SessionsControllerTest {
     }
 
     @Test
-    fun `renders form errors when authentication fails`() {
+    fun `renders invalid credentials when authentication fails`() {
         fillForm("chris", "wrong secret")
 
         val response = sessions.create(request)
@@ -50,6 +50,20 @@ class SessionsControllerTest {
             .isDone and
                 view renderedWith Login.invalid("chris")
     }
+
+    @Test
+    fun `renders form errors when form validation fails`() {
+        fillForm(username = "", password = "")
+
+        val response = sessions.create(request)
+
+        assertThat(response).hasStatus(HttpStatus.OK)
+            .isDone and view renderedWith
+                Login("") +
+                errors.login.username.required("") +
+                errors.login.password.required("")
+    }
+
 
     private fun fillForm(username: String, password: String) {
         request["username"] = username

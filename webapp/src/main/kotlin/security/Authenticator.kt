@@ -1,6 +1,8 @@
 package kickstart.security
 
-fun interface Authenticator {
 
-    fun authenticate(vararg credentials: String): User?
+typealias Credentials = List<String>
+
+fun interface Authenticator {
+    fun authenticate(credentials: Credentials): User?
 }
