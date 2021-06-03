@@ -1,7 +1,9 @@
 package kickstart.security
 
+import java.io.Serializable
+
 @JvmInline
-value class Username(val value: String)
+value class Username(val value: String): Serializable
 
 class User(val username: Username) {
 

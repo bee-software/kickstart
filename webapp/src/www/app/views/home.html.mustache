@@ -16,6 +16,7 @@
     <title>{{#t}}heading.page{{/t}}</title>
 
     <link rel="stylesheet" type="text/css" href="/fomantic-2.8.7/semantic.min.css">
+    <script src="/fomantic-2.8.7/jquery-3.6.0.min.js"></script>
     <script src="/fomantic-2.8.7/semantic.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/kickstart.css">
@@ -28,15 +29,39 @@
                 <a href="/{{lang}}">{{#t}}link.menu.home{{/t}}</a>
             </li>
 
+            {{^username}}
             <li id="login" class="right item">
                 <a href="/{{lang}}/login" class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
             </li>
+            {{/username}}
+
+            {{#username}}
+            <li class="ui right inverted inline icon dropdown item">
+                <div class="text">
+                    <div class="ui avatar image">
+                        <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=32"/>
+                    </div>
+                </div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="header">
+                        {{.}}
+                    </div>
+                    <div class="item">
+                        ...
+                    </div>
+                </div>
+            </li>
+            {{/username}}
         </menu>
     </div>
 
     <div class="ui text container">
     </div>
-        <h1 class="ui inverted header">{{#t}}heading.splash{{/t}}</h1>
+    <h1 class="ui inverted header">{{#t}}heading.splash{{/t}}</h1>
 </main>
+<script>
+    $('.top.menu .dropdown').dropdown({transition: 'drop'});
+</script>
 </body>
 </html>

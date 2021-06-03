@@ -1,23 +1,25 @@
 package kickstart.pages
 
 import kickstart.storytelling.Target
-import kickstart.storytelling.actions.*
+import kickstart.storytelling.actions.Action
+import kickstart.storytelling.actions.clickOn
+import kickstart.storytelling.actions.enterText
 
 object LoginPage {
-    private val LOGIN_FORM = Target.byCssSelector("form#login")
-    private val USERNAME_INPUT = Target.byName("username").within(LOGIN_FORM)
-    private val PASSWORD_INPUT = Target.byName("password").within(LOGIN_FORM)
-    private val LOGIN_BUTTON = Target.byTagName("button").within(LOGIN_FORM)
+    private val login_form = Target.byCssSelector("form#login")
+    private val email_input = Target.byName("email").within(login_form)
+    private val password_input = Target.byName("password").within(login_form)
+    private val login_button = Target.byTagName("button").within(login_form)
 
-    fun enterUsername(username: String): Action {
-        return enterText(username).into(USERNAME_INPUT)
+    fun enterEmail(email: String): Action {
+        return enterText(email).into(email_input)
     }
 
     fun enterPassword(password: String): Action {
-        return enterText(password).into(PASSWORD_INPUT)
+        return enterText(password).into(password_input)
     }
 
     fun signIn(): Action {
-        return clickOn(LOGIN_BUTTON)
+        return clickOn(login_button)
     }
 }

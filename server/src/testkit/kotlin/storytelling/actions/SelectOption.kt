@@ -17,4 +17,4 @@ class SelectOption(private val optionText: String) {
     }
 }
 
-fun selectByText(text: String) = SelectOption.byText(text)
+fun selectOptionByText(text: String) = SelectOption.byText(text)

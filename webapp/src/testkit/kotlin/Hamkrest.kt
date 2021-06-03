@@ -1,7 +1,6 @@
 package kickstart
 
 import com.natpryce.hamkrest.*
-import com.natpryce.hamkrest.assertion.assertThat
 import kickstart.validation.ValidationResult
 import kickstart.validation.Violation
 

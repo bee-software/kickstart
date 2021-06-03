@@ -31,17 +31,17 @@
                     {{/-last}}
                 {{/errors.login.credentials}}
 
-                <div class="field {{#errors.login.username}}error{{/errors.login.username}}">
-                    <label for="username">{{#t}}label.user.name{{/t}}</label>
+                <div class="field {{#errors.login.email}}error{{/errors.login.email}}">
+                    <label for="email">{{#t}}label.user.email{{/t}}</label>
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="username" autofocus value="{{username}}"/>
+                        <input type="text" name="email" autofocus value="{{email}}"/>
                     </div>
-                    {{#errors.login.username}}
+                    {{#errors.login.email}}
                         <div class="ui pointing red basic label">
                             {{.}}
                         </div>
-                    {{/errors.login.username}}
+                    {{/errors.login.email}}
                 </div>
                 <div class="field {{#errors.login.password}}error{{/errors.login.password}}">
                     <label for="password">{{#t}}label.user.password{{/t}}</label>

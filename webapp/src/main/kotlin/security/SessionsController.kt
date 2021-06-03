@@ -22,10 +22,12 @@ class SessionsController(
         when (val result = form.validate()) {
             is Success -> {
                 val user = authenticator.authenticate(result.value)
-                    ?: return view.done(Login.invalid(form.username))
-                // todo success
+                    ?: return view.done(Login.invalid(form.email))
+
+                val session = freshSession(request)
+                session.username = user.username
             }
-            is Failure -> return view.done(Login(form.username) + result)
+            is Failure -> return view.done(Login(form.email) + result)
         }
 
         return Response.redirect("/").done()

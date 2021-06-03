@@ -1,5 +1,7 @@
 package kickstart.security
 
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import com.vtence.molecule.Request.get
 import com.vtence.molecule.Request.post
 import com.vtence.molecule.http.HttpStatus
@@ -12,8 +14,8 @@ import kotlin.test.Test
 class SessionsControllerTest {
 
     val view = TestView<Login>()
-    val authenticator: Authenticator = Authenticator { (username, password) ->
-        password.takeIf { it == "secret" }?.let { User(username) }
+    val authenticator: Authenticator = Authenticator { (email, password) ->
+        password.takeIf { it == "secret" }?.let { User(email) }
     }
     val sessions = SessionsController(authenticator, view)
 
@@ -31,12 +33,15 @@ class SessionsControllerTest {
 
     @Test
     fun `creates fresh session when login successful`() {
-        fillForm(username = "alice", password = "secret")
+        fillForm(email = "alice@gmail.com", password = "secret")
 
+        freshSession(request).invalidate()
         val response = sessions.create(request)
 
-        //...
         assertThat(response).isRedirectedTo("/").isDone
+
+        val user = request.session.username
+        assertThat("signed in email", user, equalTo(Username("alice@gmail.com")))
     }
 
     @Test
@@ -53,20 +58,20 @@ class SessionsControllerTest {
 
     @Test
     fun `renders form errors when form validation fails`() {
-        fillForm(username = "", password = "")
+        fillForm(email = "", password = "")
 
         val response = sessions.create(request)
 
         assertThat(response).hasStatus(HttpStatus.OK)
             .isDone and view renderedWith
                 Login("") +
-                errors.login.username.required("") +
+                errors.login.email.required("") +
                 errors.login.password.required("")
     }
 
 
-    private fun fillForm(username: String, password: String) {
-        request["username"] = username
+    private fun fillForm(email: String, password: String) {
+        request["email"] = email
         request["password"] = password
     }
 }

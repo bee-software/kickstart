@@ -19,15 +19,16 @@ class WebApp(config: Configuration) : Application {
         val views = i18n.localize(pages, request.attribute())
 
         val authenticator = Authenticator {
-                (username, password) -> password.takeIf { it == "secret" }?.let { User(username) }
+                (email, password) -> password.takeIf { it == "secret" }?.let { User(email) }
         }
+
         val sessions = SessionsController(authenticator, views.named("sessions/new"))
+        val home = HomeController(views.named("home"))
 
         val router = draw {
-            get("/login").to(sessions::new)
-            post("/login").to(sessions::create)
-
-            get("/").to { views.named<Home>("home").render(Home()).done() }
+            get("/login").to { sessions.new(it) }
+            post("/login").to { sessions.create(it) }
+            get("/").to { home.render(it) }
         }
 
         return router.handle(request)

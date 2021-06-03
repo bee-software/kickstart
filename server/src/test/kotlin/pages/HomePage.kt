@@ -1,17 +1,29 @@
 package kickstart.pages
 
+import com.natpryce.hamkrest.equalToIgnoringCase
+import kickstart.hasText
+import kickstart.storytelling.Fact
 import kickstart.storytelling.Target
-import kickstart.storytelling.actions.Click
-import kickstart.storytelling.facts.isShowingOnScreen
+import kickstart.storytelling.actions.clickOn
+import kickstart.storytelling.browsing.browsingAs
 
 object HomePage {
-    private val TOP_MENU = Target.byCssSelector("main menu.top")
-    private val LOGIN_BUTTON = Target.byCssSelector("#login a.button").within(TOP_MENU)
-    private val LOGOUT_BUTTON = Target.byCssSelector("#logout a.button").within(TOP_MENU)
+    private val top_menu = Target.byCssSelector("main menu.top")
+    private val login_button = Target.byCssSelector("#login a.button").within(top_menu)
+    private val profile_menu = Target.byCssSelector(".right.icon.dropdown.item").within(top_menu)
 
-    fun login() = Click.on(LOGIN_BUTTON)
+    fun login() = clickOn(login_button)
 
-    fun logout() = Click.on(LOGOUT_BUTTON)
+    fun openProfileMenu() = clickOn(profile_menu)
 
-    val isShowing = TOP_MENU.isShowingOnScreen
+    object ProfileMenu {
+        private val header = Target.byCssSelector(".header").within(profile_menu)
+        private val logout_button = Target.byCssSelector("button#logout").within(profile_menu)
+
+        fun showsCurrentlySignedInAs(email: String): Fact = { actor ->
+            browsingAs(actor).check(header).hasText(equalToIgnoringCase(email))
+        }
+
+        fun logout() = clickOn(logout_button)
+    }
 }

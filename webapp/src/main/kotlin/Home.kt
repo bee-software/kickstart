@@ -4,11 +4,15 @@ import kickstart.i18n.I18ned
 import kickstart.i18n.LocalizedMessages
 import kickstart.i18n.interpolation
 import kickstart.i18n.noMessages
+import kickstart.security.Username
 
 
-data class Home(private val messages: LocalizedMessages = noMessages): I18ned {
+data class Home(
+    val username: Username? = null,
+    private val messages: LocalizedMessages = noMessages
+): I18ned {
     val lang by messages::language
     val t by messages::interpolation
 
-    override fun localize(messages: LocalizedMessages) = Home(messages)
+    override fun localize(messages: LocalizedMessages) = copy(messages = messages)
 }

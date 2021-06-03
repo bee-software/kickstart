@@ -6,7 +6,7 @@ import kickstart.validation.ValidationResult.Failure
 import kickstart.validation.ValidationResult.Success
 
 data class Login(
-    val username: String? = null,
+    val email: String? = null,
     private val violations: List<Violation> = listOf(),
     private val messages: LocalizedMessages = noMessages
 ) : I18ned {
@@ -25,7 +25,7 @@ data class Login(
     companion object {
         val empty = Login()
 
-        fun invalid(username: String?): Login = Login(username) + errors.login.credentials.invalid(username)
+        fun invalid(email: String?): Login = Login(email) + errors.login.credentials.invalid(email)
     }
 }
 
@@ -36,7 +36,7 @@ object errors : ValidationKeys() {
             val invalid by failure
         }
 
-        object username : ValidationKeys() {
+        object email : ValidationKeys() {
             val required by notBlank
         }
 

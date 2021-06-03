@@ -15,6 +15,8 @@ val DocElement.value get() = attribute("value")
 infix fun <T> T.should(match: Matcher<T>) =
     assertThat(this, present(match))
 
+infix fun <T> T.check(match: Matcher<T>) = this should match
+
 infix fun <T> T.shouldBe(value: T) = this should equalTo(value)
 
 

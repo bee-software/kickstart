@@ -18,7 +18,7 @@ class LoginPageTest {
                     attribute("method") shouldBe "post"
                     className should !containsSubstring("error")
 
-                    findFirst("input[name=username]") {
+                    findFirst("input[name=email]") {
                         value shouldBe ""
                     }
                     findFirst("input[name=password]") {
@@ -30,8 +30,8 @@ class LoginPageTest {
     }
 
     @Test
-    fun `reports invalid credentials, keeping posted username`() {
-        render(Login.invalid(username = "john")) {
+    fun `reports invalid credentials, keeping posted email`() {
+        render(Login.invalid(email = "john")) {
             form {
                 findFirst {
                     className should containsSubstring("error")
@@ -43,7 +43,7 @@ class LoginPageTest {
                     }
                 }
 
-                findFirst("input[name=username]") {
+                findFirst("input[name=email]") {
                     value shouldBe "john"
                 }
             }
@@ -51,22 +51,22 @@ class LoginPageTest {
     }
 
     @Test
-    fun `renders errors when form is invalid, keeping posted username`() {
+    fun `renders errors when form is invalid, keeping posted email`() {
         render(
             Login("john")
-                    + errors.login.username.required("")
+                    + errors.login.email.required("")
                     + errors.login.password.required("")
         ) {
             form("#login") {
                 findFirst {
                     className should containsSubstring("error")
 
-                    findFirst("input[name=username]") {
+                    findFirst("input[name=email]") {
                         value shouldBe "john"
                     }
 
-                    findFirst(errorLabelFor("username")) {
-                        text shouldBe "Please enter your username"
+                    findFirst(errorLabelFor("email")) {
+                        text shouldBe "Please enter your email"
                     }
 
                     findFirst("input[name=password]") {

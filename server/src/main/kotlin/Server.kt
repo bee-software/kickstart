@@ -4,10 +4,8 @@ import com.natpryce.konfig.Configuration
 import com.vtence.molecule.Application
 import com.vtence.molecule.Response
 import com.vtence.molecule.WebServer
-import com.vtence.molecule.middlewares.ApacheCommonLogger
-import com.vtence.molecule.middlewares.Cookies
-import com.vtence.molecule.middlewares.DateHeader
-import com.vtence.molecule.middlewares.ServerHeader
+import com.vtence.molecule.middlewares.*
+import com.vtence.molecule.session.CookieSessionStore
 import kickstart.i18n.LocaleSelector
 import java.net.URI
 import java.nio.file.Path
@@ -34,6 +32,7 @@ class Server(host: String, port: Int) {
             .mount("/status", diagnostics())
             .add(Cookies())
             .add(LocaleSelector.usingDefaultLocale(config[Settings.www.lang]))
+            .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
             .start(WebApp(config))
     }
 
