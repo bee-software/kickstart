@@ -10,7 +10,6 @@ params:
 
 # Cache the Gradle repository directory
 caches:
-  - path: $HOME/.gradle
   - path: $HOME/.gradle/caches/
   - path: $HOME/.gradle/wrapper/
 
