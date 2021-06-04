@@ -17,4 +17,5 @@ inputs:
   - name: sources
 
 run:
+  user: root
   path: sources/ci/build.sh
