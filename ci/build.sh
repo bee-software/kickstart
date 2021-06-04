@@ -2,4 +2,4 @@
 
 export TERM=${TERM:-dumb}
 cd sources
-gradle --no-daemon build
+make build
