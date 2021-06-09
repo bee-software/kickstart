@@ -4,7 +4,6 @@ import com.natpryce.hamkrest.allElements
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.equalToIgnoringCase
 import it.skrape.matchers.toBeNotPresent
-import it.skrape.matchers.toBePresent
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.main
@@ -82,8 +81,9 @@ class HomePageTest {
                             text should equalToIgnoringCase("alice@gmail.com")
                         }
 
-                        findAll(".avatar.image") { toBePresent }
-                        // todo
+                        findFirst(".avatar img") {
+                            attribute("src") shouldBe "//www.gravatar.com/avatar/0ce273d3249291c620af81403b14b3c1?d=mp&s=32"
+                        }
                     }
                 }
             }
