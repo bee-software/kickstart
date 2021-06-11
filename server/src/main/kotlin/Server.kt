@@ -27,6 +27,7 @@ class Server(host: String, port: Int) {
         webServer.failureReporter(this::errorLogger)
             .add(ServerHeader("Simple/6.0.1"))
             .add(DateHeader(Clock.systemDefaultZone()))
+            .add(HttpMethodOverride())
             .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), config[Settings.www.lang]))
             .add(staticAssets(config[Settings.www.root]))
             .mount("/status", diagnostics())

@@ -13,7 +13,10 @@ class SessionsController(
 ) {
 
     fun new(request: Request): Response {
-        return view.done(Login.empty)
+        return if (request.session.isLoggedIn)
+            Response.redirect("/").done()
+        else
+            view.done(Login.empty)
     }
 
     fun create(request: Request): Response {
@@ -24,12 +27,17 @@ class SessionsController(
                 val user = authenticator.authenticate(result.value)
                     ?: return view.done(Login.invalid(form.email))
 
-                val session = freshSession(request)
+                val session = bindFreshSession(request)
                 session.username = user.username
             }
             is Failure -> return view.done(Login(form.email) + result)
         }
 
+        return Response.redirect("/").done()
+    }
+
+    fun delete(request: Request): Response {
+        request.session.invalidate()
         return Response.redirect("/").done()
     }
 }

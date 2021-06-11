@@ -24,35 +24,40 @@
 <body>
 <main class="ui inverted vertical center aligned segment">
     <div class="ui container">
-        <menu class="ui large top secondary inverted pointing menu">
+        <menu type="toolbar" class="ui large top secondary inverted pointing menu">
             <li class="active item">
                 <a href="/{{lang}}">{{#t}}link.menu.home{{/t}}</a>
             </li>
 
-            {{^username}}
-            <li id="login" class="right item">
-                <a href="/{{lang}}/login" class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
+            <li class="right menu">
+                {{#username}}
+                    <div class="ui inverted inline icon dropdown item">
+                        <div class="text">
+                            <div class="ui avatar image">
+                                <img src="//www.gravatar.com/avatar/{{gravatar}}?d=mp&s=32"/>
+                            </div>
+                        </div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="header">
+                                {{.}}
+                            </div>
+                            <div class="disabled item">
+                                ...
+                            </div>
+                        </div>
+                    </div>
+                    <form id="logout" class="item" action="/logout" method="post">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="ui inverted button">Log out</button>
+                    </form>
+                {{/username}}
+                {{^username}}
+                    <div id="login" class="item">
+                        <a href="/{{lang}}/login" class="ui inverted button">{{#t}}button.menu.login{{/t}}</a>
+                    </div>
+                {{/username}}
             </li>
-            {{/username}}
-
-            {{#username}}
-            <li class="ui right inverted inline icon dropdown item">
-                <div class="text">
-                    <div class="ui avatar image">
-                        <img src="//www.gravatar.com/avatar/{{gravatar}}?d=mp&s=32"/>
-                    </div>
-                </div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="header">
-                        {{.}}
-                    </div>
-                    <div class="item">
-                        ...
-                    </div>
-                </div>
-            </li>
-            {{/username}}
         </menu>
     </div>
 

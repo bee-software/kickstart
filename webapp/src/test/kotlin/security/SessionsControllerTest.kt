@@ -9,6 +9,7 @@ import com.vtence.molecule.testing.ResponseAssert.assertThat
 import kickstart.TestView
 import kickstart.and
 import kickstart.set
+import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class SessionsControllerTest {
@@ -19,11 +20,16 @@ class SessionsControllerTest {
     }
     val sessions = SessionsController(authenticator, view)
 
-    val request = post("/")
+    val request = get("/")
+
+    @BeforeEach
+    fun bindSession() {
+        bindFreshSession(request)
+    }
 
     @Test
     fun `renders login page to open session`() {
-        val response = sessions.new(get("/"))
+        val response = sessions.new(request)
 
         assertThat(response)
             .hasStatus(HttpStatus.OK)
@@ -35,7 +41,7 @@ class SessionsControllerTest {
     fun `creates fresh session when login successful`() {
         fillForm(email = "alice@gmail.com", password = "secret")
 
-        freshSession(request).invalidate()
+        request.session.invalidate()
         val response = sessions.create(request)
 
         assertThat(response).isRedirectedTo("/").isDone
@@ -69,6 +75,25 @@ class SessionsControllerTest {
                 errors.login.password.required("")
     }
 
+    @Test
+    fun `redirects to download page if session already opened`() {
+        request.session.username = Username("John")
+
+        val response = sessions.new(request)
+
+        assertThat(response).isRedirectedTo("/").isDone
+    }
+
+    @Test
+    fun `destroys session and redirects to home page on logout`() {
+        val response = sessions.delete(request)
+
+        assertThat(response)
+            .isRedirectedTo("/")
+            .isDone
+
+        assertThat("session invalidated", request.session.invalid(), equalTo(true))
+    }
 
     private fun fillForm(email: String, password: String) {
         request["email"] = email

@@ -28,6 +28,7 @@ class WebApp(config: Configuration) : Application {
         val router = draw {
             get("/login").to { sessions.new(it) }
             post("/login").to { sessions.create(it) }
+            delete("/logout").to { sessions.delete(it) }
             get("/").to { home.render(it) }
         }
 

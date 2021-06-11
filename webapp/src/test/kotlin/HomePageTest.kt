@@ -53,12 +53,9 @@ class HomePageTest {
 
             main {
                 menu {
-                    a {
-                        withClass = "button"
-                        findFirst {
-                            text shouldBe "Log in"
-                            attribute("href") shouldBe "/en/login"
-                        }
+                    findFirst("#login a") {
+                        text shouldBe "Log in"
+                        attribute("href") shouldBe "/en/login"
                     }
 
                     findAll(".avatar.image") { toBeNotPresent }
@@ -74,8 +71,6 @@ class HomePageTest {
 
             main {
                 menu {
-                    findAll("#login a") { toBeNotPresent }
-
                     ".dropdown.item" {
                         findFirst(".menu .header") {
                             text should equalToIgnoringCase("alice@gmail.com")
@@ -90,8 +85,37 @@ class HomePageTest {
         }
     }
 
+    @Test
+    fun `offers logout option for signed in users`() {
+        render(Home(username = Username("alice@gmail.com"))) {
+            relaxed = true
 
-    private fun render(content: Home = Home(), locale: Locale = Locale.getDefault(), expectations: Expectations): Doc {
+            main {
+                menu {
+                    findAll("#login a") { toBeNotPresent }
+
+                    findFirst("form#logout") {
+                        attribute("action") shouldBe "/logout"
+                        attribute("method") shouldBe "post"
+
+                        findFirst("input[name=_method]") {
+                            value should equalToIgnoringCase("delete")
+                        }
+                        findFirst("button") {
+                            text shouldBe "Log out"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun render(
+        content: Home = Home(),
+        locale: Locale = Locale.getDefault(),
+        expectations: Expectations
+    ): Doc {
         return renderView("home", content, locale, expectations)
     }
 }

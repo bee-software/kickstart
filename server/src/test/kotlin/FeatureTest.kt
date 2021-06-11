@@ -31,7 +31,7 @@ class FeatureTest {
     fun `example scenario`() {
         actor.wasAbleTo(
             signInAs(Users.bob),
-//            signOut()
+            signOut()
         )
     }
 }

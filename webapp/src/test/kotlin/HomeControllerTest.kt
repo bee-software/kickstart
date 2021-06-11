@@ -4,7 +4,7 @@ import com.vtence.molecule.Request
 import com.vtence.molecule.http.HttpStatus
 import com.vtence.molecule.testing.ResponseAssert.assertThat
 import kickstart.security.Username
-import kickstart.security.freshSession
+import kickstart.security.bindFreshSession
 import kickstart.security.username
 import kotlin.test.Test
 
@@ -15,7 +15,7 @@ class HomeControllerTest {
     @Test
     fun `renders home page, with currently signed in user`() {
         val request = Request.get("/")
-        freshSession(request).also { it.username = Username("alice@gmail.com") }
+        bindFreshSession(request).also { it.username = Username("alice@gmail.com") }
 
         val response = home.render(request)
 

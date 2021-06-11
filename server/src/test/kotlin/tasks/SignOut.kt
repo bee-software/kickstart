@@ -1,15 +1,16 @@
 package kickstart.tasks
 
-import kickstart.pages.HomePage.ProfileMenu
+import kickstart.pages.HomePage
 import kickstart.storytelling.Actor
 import kickstart.storytelling.Task
+import kickstart.storytelling.on
 
 object SignOut : Task {
     override fun invoke(actor: Actor) {
-        with(ProfileMenu) {
+        on(HomePage) {
             actor.does(logout())
+            actor.checks(showsLoginButton())
         }
-//        actor.checks(....isShowingOnScreen())
     }
 }
 

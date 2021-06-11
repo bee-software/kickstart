@@ -20,3 +20,7 @@ main.segment h1.ui.header {
     background-color: #333333;
     color: #fff;
 }
+
+.ui.secondary.pointing.menu .icon.dropdown.item {
+    align-self: center;
+}
