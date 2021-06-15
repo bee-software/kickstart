@@ -5,12 +5,13 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.containsSubstring
 import com.vtence.molecule.http.HeaderNames
 import com.vtence.molecule.testing.http.HttpResponseAssert.assertThat
+import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
-import java.net.http.HttpResponse.*
+import java.net.http.HttpResponse.BodyHandlers
 
 class ServerTest {
     val server = Server("localhost", 19999)
@@ -87,5 +88,14 @@ class ServerTest {
         val response = client.send(request.GET(server.resolve("/")))
 
         assertThat(response).hasHeader(HeaderNames.LOCATION, "/en")
+    }
+
+    @Test
+    fun `responds with localized 404 page when resource is not found`() {
+        val response = client.send(request.GET(server.resolve("/fr/404")))
+
+        assertThat(response)
+            .hasStatusCode(404)
+            .hasBody(containsString("égarée, désolé"))
     }
 }

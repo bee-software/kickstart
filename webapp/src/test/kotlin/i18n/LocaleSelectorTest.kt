@@ -6,17 +6,13 @@ import com.vtence.molecule.Response
 import com.vtence.molecule.http.HttpMethod
 import com.vtence.molecule.lib.CookieJar
 import com.vtence.molecule.testing.CookieJarAssert.assertThat
-import com.vtence.molecule.testing.RequestAssert.assertThat
 import com.vtence.molecule.testing.ResponseAssert.assertThat
-
-import kickstart.attribute
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
-
-import kotlin.test.Test
-import kotlin.test.BeforeTest
-import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertFails
 
 class LocaleSelectorTest {
@@ -35,7 +31,7 @@ class LocaleSelectorTest {
         val app = selector
             .alsoSupporting("fr-CA")
             .then { request ->
-                val locale = request.attribute<Locale>()
+                val locale = request.locale
                 Response.ok().done("Forwarded with locale $locale")
             }
 
@@ -76,7 +72,7 @@ class LocaleSelectorTest {
         val ninetyDays = TimeUnit.DAYS.toSeconds(90).toInt()
 
         val app = Application { request ->
-            val locale: Locale = request.attribute()
+            val locale = request.locale
             Response.ok().done("${request.uri()} ($locale)")
         }
 
@@ -237,12 +233,11 @@ class LocaleSelectorTest {
                 .then { Response.ok() }
                 .handle(request.path("/fr"))
 
-            assertThat(request).hasAttribute(Locale::class.java, notNullValue())
+            assertThat(request.locale, notNullValue())
             response.done()
 
             assertThat(response).hasStatusCode(200)
-            assertThat(request)
-                .hasNoAttribute(Locale::class.java)
+            assertThat(request.locale, nullValue())
         }
 
         @Test
@@ -253,8 +248,7 @@ class LocaleSelectorTest {
 
             assertFails { app.handle(request.path("/fr")) }
 
-            assertThat(request)
-                .hasNoAttribute(Locale::class.java)
+            assertThat(request.locale, nullValue())
         }
 
         @Test
@@ -265,13 +259,11 @@ class LocaleSelectorTest {
 
             val response = app.handle(request.path("/fr"))
 
-            assertThat(request)
-                .hasAttribute(Locale::class.java, notNullValue())
+            assertThat(request.locale, notNullValue())
 
             response.done(Exception("Error !"))
 
-            assertThat(request)
-                .hasNoAttribute(Locale::class.java)
+            assertThat(request.locale, nullValue())
         }
     }
 }

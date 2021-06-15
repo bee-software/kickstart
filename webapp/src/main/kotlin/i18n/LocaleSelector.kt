@@ -23,14 +23,14 @@ class LocaleSelector private constructor(
     override fun then(next: Application): Application {
         return Application { request ->
             if (request.method() in listOf(POST, PUT, DELETE)) {
-                request.attribute(Locale::class.java, negotiatedLocaleOf(request))
+                request.locale = negotiatedLocaleOf(request)
                 return@Application next.handle(request)
             }
 
             val locale = figureOutLocaleOf(request) ?: return@Application Response.redirect(negotiatedUri(request)).done()
 
             request.setCookieLocale(locale, duration = FOR_3_MONTHS)
-            request.attribute(Locale::class.java, locale)
+            request.locale = locale
 
             try {
                 return@Application next.handle(request).whenComplete { _, _ -> unbindLocaleFrom(request) }
@@ -41,7 +41,9 @@ class LocaleSelector private constructor(
         }
     }
 
-    private fun unbindLocaleFrom(request: Request) = request.removeAttribute(Locale::class.java)
+    private fun unbindLocaleFrom(request: Request) {
+        request.locale = null
+    }
 
     private fun figureOutLocaleOf(request: Request): Locale? {
         return LANGUAGE_URI.find(request.path().toString())?.let {
@@ -103,3 +105,11 @@ class LocaleSelector private constructor(
 
 fun LocaleSelector.alsoSupporting(vararg languages: String) =
     alsoSupporting(languages.map { Locale.forLanguageTag(it) })
+
+
+var Request.locale: Locale?
+    get() = attribute(Locale::class)
+    set(value) {
+        if (value == null) removeAttribute(Locale::class)
+        else attribute(Locale::class, value)
+    }

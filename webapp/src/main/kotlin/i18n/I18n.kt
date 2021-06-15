@@ -4,9 +4,9 @@ import kickstart.View
 import kickstart.Views
 import java.util.*
 
-class I18n(private val supportedLocales: Set<Locale>, location: String) {
+class I18n(val supportedLocales: Set<Locale>, location: String) {
     init {
-        if (supportedLocales.isEmpty()) throw IllegalArgumentException("No supported locales given")
+        require(supportedLocales.isNotEmpty()) { "No supported locales specified" }
     }
 
     private val messages = BundledMessages.rootedAt(location)
@@ -20,7 +20,7 @@ class I18n(private val supportedLocales: Set<Locale>, location: String) {
                     val view = views.named<Any>(name)
                     if (content is I18ned) {
                         val translations = messages.loadBundle("views", name, locale)
-                        view.render(content.localize(Translations(locale, alternativeLocales(locale), translations)))
+                        view.render(content.localize(Translations(locale, alternativeTo(locale), translations)))
                     } else {
                         view.render(content)
                     }
@@ -29,7 +29,7 @@ class I18n(private val supportedLocales: Set<Locale>, location: String) {
         }
     }
 
-    private fun alternativeLocales(current: Locale) = supportedLocales.filterNot { it == current }.toSet()
+    fun alternativeTo(locale: Locale) = supportedLocales.filterNot { it == locale }.toSet()
 }
 
 fun i18n(defaultLocale: Locale, vararg alternativeLocales: Locale) =

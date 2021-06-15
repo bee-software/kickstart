@@ -10,6 +10,7 @@ import kickstart.i18n.LocaleSelector
 import java.net.URI
 import java.nio.file.Path
 import java.time.Clock
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -32,8 +33,10 @@ class Server(host: String, port: Int) {
             .add(staticAssets(config[Settings.www.root]))
             .mount("/status", diagnostics())
             .add(Cookies())
-            .add(LocaleSelector.usingDefaultLocale(config[Settings.www.lang]))
+            .add(LocaleSelector.usingDefaultLocale(config[Settings.www.lang])
+                .alsoSupporting(Locale.CANADA_FRENCH, Locale.CANADA))
             .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
+            .add(PublicExceptions(config[Settings.www.root]))
             .start(WebApp(config))
     }
 
@@ -58,7 +61,4 @@ private fun staticAssets(root: Path) = assets(root.resolve("assets")) {
     serve("/css")
     serve("/fomantic")
 }
-
-
-
 

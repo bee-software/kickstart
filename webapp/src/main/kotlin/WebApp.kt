@@ -5,6 +5,7 @@ import com.vtence.molecule.Application
 import com.vtence.molecule.Request
 import com.vtence.molecule.Response
 import kickstart.i18n.i18n
+import kickstart.i18n.locale
 import kickstart.security.Authenticator
 import kickstart.security.SessionsController
 import kickstart.security.User
@@ -16,7 +17,7 @@ class WebApp(config: Configuration) : Application {
     private val i18n = i18n(config[Settings.www.lang], Locale.CANADA_FRENCH, Locale.CANADA)
 
     override fun handle(request: Request): Response {
-        val views = i18n.localize(pages, request.attribute())
+        val views = i18n.localize(pages, checkNotNull(request.locale))
 
         val authenticator = Authenticator {
                 (email, password) -> password.takeIf { it == "secret" }?.let { User(email) }
