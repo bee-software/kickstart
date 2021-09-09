@@ -23,14 +23,14 @@ class HomePageTest {
 
     @Test
     fun `has title`() {
-        render() {
+        render {
             titleText shouldBe "Kickstart"
         }
     }
 
     @Test
     fun `links back home`() {
-        render() {
+        render {
             main {
                 menu {
                     "li.active" {

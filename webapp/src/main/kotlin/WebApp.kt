@@ -19,8 +19,8 @@ class WebApp(config: Configuration) : Application {
     override fun handle(request: Request): Response {
         val views = i18n.localize(pages, checkNotNull(request.locale))
 
-        val authenticator = Authenticator {
-                (email, password) -> password.takeIf { it == "secret" }?.let { User(email) }
+        val authenticator = Authenticator { (email, password) ->
+            password.takeIf { it == "secret" }?.let { User(email) }
         }
 
         val sessions = SessionsController(authenticator, views.named("sessions/new"))

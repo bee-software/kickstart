@@ -19,7 +19,7 @@ class PublicExceptionsTest {
 
     @Test
     fun `renders html exception page, named after status code`() {
-        val response = exceptions.then { _ -> Response.of(HttpStatus.BAD_GATEWAY).done() }
+        val response = exceptions.then { Response.of(HttpStatus.BAD_GATEWAY).done() }
             .handle(request)
 
         assertThat(response)
@@ -32,7 +32,7 @@ class PublicExceptionsTest {
     @Test
     fun `renders localized version of page if possible`() {
         request.locale = Locale.CANADA_FRENCH
-        val response = exceptions.then { _ -> Response.of(HttpStatus.BAD_GATEWAY).done() }
+        val response = exceptions.then { Response.of(HttpStatus.BAD_GATEWAY).done() }
             .handle(request)
 
         assertThat(response).hasBodyText(containsString("Passerelle en panne"))
@@ -41,7 +41,7 @@ class PublicExceptionsTest {
     @Test
     fun `falls back to non localized page otherwise`() {
         request.locale = Locale.JAPANESE
-        val response = exceptions.then { _ -> Response.of(HttpStatus.BAD_GATEWAY).done() }
+        val response = exceptions.then { Response.of(HttpStatus.BAD_GATEWAY).done() }
             .handle(request)
 
         assertThat(response).hasBodyText(containsString("Bad Gateway"))
@@ -49,7 +49,7 @@ class PublicExceptionsTest {
 
     @Test
     fun `leaves response unchanged if no matching error page can be found`() {
-        val response = exceptions.then { _  -> Response.ok().done("All good") }
+        val response = exceptions.then { Response.ok().done("All good") }
             .handle(request)
 
         assertThat(response).hasStatus(HttpStatus.OK).hasBodyText("All good")

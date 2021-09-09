@@ -54,6 +54,8 @@ class BundledMessages(private val root: Path) {
     }
 }
 
+fun BundledMessages.loadBundle(name: String, locale: Locale) = loadBundle("", name, locale)
+
 fun BundledMessages.loadBundle(path: String, name: String, locale: Locale) =
     at(Paths.get(path)).load(Paths.get(name), locale)
 

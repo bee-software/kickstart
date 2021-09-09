@@ -29,7 +29,7 @@ data class Translations(
 }
 
 
-class MissingTranslationException(val key: String, val messages: Messages): RuntimeException() {
+class MissingTranslationException(key: String, messages: Messages): RuntimeException() {
     override val message = "$key not found; searched:\n${messages.searchPath(key).description}"
 }
 

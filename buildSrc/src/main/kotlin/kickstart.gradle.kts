@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
     kotlin("jvm")
 }
 
@@ -63,7 +62,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
     testkitImplementation(libs.hamkrest)

@@ -34,7 +34,7 @@ class CompositeMessages(private val messages: List<Messages>) : Messages {
 
     override fun interpolate(key: String, vararg args: Any): String? {
         return messages.firstNotNullOfOrNull {
-            kotlin.runCatching { it.interpolate(key) }.getOrNull()
+            runCatching { it.interpolate(key) }.getOrNull()
         }
     }
 

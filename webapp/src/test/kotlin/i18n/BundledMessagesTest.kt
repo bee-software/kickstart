@@ -13,7 +13,7 @@ class BundledMessagesTest {
 
     @Test
     fun `loads translations in specified locale`() {
-        val translations = bundles.loadBundle("", "defaults", Locale.FRENCH)
+        val translations = bundles.loadBundle("defaults", Locale.FRENCH)
 
         assertThat(
             "translated value", translations.interpolate("app.value"),
@@ -57,7 +57,7 @@ class BundledMessagesTest {
 
     @Test
     fun `ignores missing bundles`() {
-        val translations = bundles.loadBundle("", "missing", Locale.ENGLISH)
+        val translations = bundles.loadBundle("missing", Locale.ENGLISH)
 
         assertThat(translations.interpolate("key"), absent())
     }

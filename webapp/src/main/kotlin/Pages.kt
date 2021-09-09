@@ -36,4 +36,4 @@ class Pages(folder: Path): Views  {
     }
 }
 
-fun pages(root: Path) = Pages(root.resolve("app").resolve("views"))
+fun pages(root: Path) = Pages.inDir(root.resolve("app").resolve("views"))
