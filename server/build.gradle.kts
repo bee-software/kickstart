@@ -9,6 +9,7 @@ application {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":webapp"))
     implementation(libs.konfig)
     implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
