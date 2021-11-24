@@ -28,16 +28,14 @@ object HexDecoder {
 
     private fun fromHex(hex: CharArray): ByteArray {
         val len = hex.size
-        require(len and 0x01 == 0) { "Odd number of characters" }
+        require(len and 0x01 == 0) { "rOdd number of characters" }
         val out = ByteArray(len shr 1)
 
         // 2 characters form the hex value
-        var i = 0
-        var j = 0
-        0.until(len * 2).forEach {
-            out[i] = (toDigit(hex[j++]) shl 4 or toDigit(hex[j++]) and 0xFF).toByte()
-            i++
+        0.until(out.size).forEach {
+            out[it] = (toDigit(hex[2 * it]) shl 4 or toDigit(hex[2 * it + 1]) and 0xFF).toByte()
         }
+
         return out
     }
 
