@@ -16,10 +16,14 @@ dependencies {
 
     runtimeOnly(libs.simple)
 
+    testkitImplementation(libs.hamkrest)
+    testkitImplementation(libs.mario)
+    testkitImplementation(libs.selenium.api)
+    testkitImplementation(libs.selenium.chromedriver)
+
     testRuntimeOnly(libs.hamcrest.library)
     testRuntimeOnly(libs.juniversalchardet)
     testRuntimeOnly(libs.simple)
-    testkitImplementation(libs.hamkrest)
 }
 
 jib {

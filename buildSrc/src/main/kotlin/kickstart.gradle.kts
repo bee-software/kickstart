@@ -25,34 +25,6 @@ java {
     }
 }
 
-sourceSets {
-    create("testkit") {
-        java.srcDir(file("src/testkit/java"))
-        java.srcDir(file("src/testkit/main"))
-        resources.srcDir(file("src/testkit/resources"))
-        compileClasspath += sourceSets["main"].output
-        runtimeClasspath += sourceSets["main"].output
-    }
-}
-
-sourceSets.test {
-    compileClasspath += sourceSets["testkit"].output
-    runtimeClasspath += sourceSets["testkit"].output
-}
-
-val testkitImplementation by configurations.getting {
-    extendsFrom(configurations.implementation.get())
-}
-
-val testImplementation by configurations.getting {
-    extendsFrom(configurations["testkitImplementation"])
-}
-
-val testkit by configurations.creating {
-    isCanBeResolved = false
-    isCanBeConsumed = true
-}
-
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
@@ -61,21 +33,37 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-dependencies {
-    implementation(kotlin("reflect"))
-
-    testkitImplementation(libs.hamkrest)
-    testkitImplementation(libs.junit.api)
-    testkitImplementation(libs.faker)
-    testkitImplementation(libs.mario)
-    testkitImplementation(libs.selenium.api)
-    testkitImplementation(libs.selenium.chromedriver)
-
-    testkit(sourceSets["testkit"].output)
-
-    testImplementation(kotlin("test"))
-
+sourceSets {
+    create("testkit") {
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
+    }
 }
+
+val testkit by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = true
+}
+
+val testkitImplementation by configurations.getting { extendsFrom(configurations.implementation.get()) }
+configurations["testImplementation"].extendsFrom(testkitImplementation)
+
+sourceSets.test {
+    compileClasspath += sourceSets["testkit"].output
+    runtimeClasspath += sourceSets["testkit"].output
+}
+
+val acceptance by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets["testkit"].output
+    runtimeClasspath += sourceSets.main.get().output + sourceSets["testkit"].output
+}
+
+val acceptanceImplementation by configurations.getting {
+    extendsFrom(configurations.testImplementation.get())
+}
+
+configurations[acceptance.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
 
 tasks.test {
     useJUnitPlatform()
@@ -83,4 +71,33 @@ tasks.test {
     testLogging {
         events("failed", "standardOut")
     }
+}
+
+val acceptanceTest = tasks.register<Test>("acceptanceTest") {
+    description = "Runs acceptance tests."
+    group = "verification"
+    useJUnitPlatform()
+
+    testClassesDirs = acceptance.output.classesDirs
+    classpath = configurations[acceptance.runtimeClasspathConfigurationName] +
+            sourceSets.main.get().output +
+            sourceSets["testkit"].output +
+            acceptance.output
+
+    shouldRunAfter(tasks.test)
+}
+
+tasks.check {
+    dependsOn(acceptanceTest)
+}
+
+dependencies {
+    implementation(kotlin("reflect"))
+
+    testkitImplementation(libs.hamkrest)
+    testkitImplementation(libs.junit.api)
+    testkitImplementation(libs.faker)
+    testkit(sourceSets["testkit"].output)
+
+    testImplementation(kotlin("test"))
 }

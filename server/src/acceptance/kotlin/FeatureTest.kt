@@ -1,5 +1,4 @@
-package kickstart
-
+import kickstart.CLI
 import kickstart.models.Users
 import kickstart.storytelling.Actor
 import kickstart.storytelling.browsing.BrowseTheWeb
@@ -13,7 +12,7 @@ import kotlin.test.Test
 
 class FeatureTest {
 
-    val application = CLI.launch("-e", "test", "-q", "true")
+    val application = CLI.launch("-e", "acceptance", "-q", "true")
 
     val actor = Actor.ableTo(BrowseTheWeb.withHisBrowser())
 
