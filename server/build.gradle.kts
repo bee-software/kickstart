@@ -28,7 +28,7 @@ dependencies {
 
 jib {
     from {
-        image = "openjdk:16-alpine"
+        image = "openjdk:17-alpine"
     }
     to {
         image = "bee-software/kickstart"
