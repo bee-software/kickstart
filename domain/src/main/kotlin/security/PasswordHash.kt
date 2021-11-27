@@ -1,4 +1,4 @@
-package security
+package kickstart.security
 
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory

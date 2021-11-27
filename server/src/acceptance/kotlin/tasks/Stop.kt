@@ -7,7 +7,6 @@ import kickstart.storytelling.Task
 class Stop(private val server: Server) : Task {
     override fun invoke(actor: Actor) {
         actor.leave()
-        server.stop()
     }
 
     companion object {

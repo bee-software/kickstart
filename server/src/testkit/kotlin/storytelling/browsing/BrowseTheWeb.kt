@@ -29,8 +29,6 @@ class BrowseTheWeb(private val browser: BrowserDriver) : Ability {
     companion object {
         private val timeout = System.getProperty("wait.timeout", "5000").toLong()
 
-        fun withHisBrowser() = using(defaultBrowser())
-
         fun using(driver: WebDriver): BrowseTheWeb {
             return BrowseTheWeb(BrowserDriver(UnsynchronizedProber(timeout, 50), driver))
         }

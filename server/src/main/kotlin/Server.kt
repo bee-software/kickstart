@@ -40,7 +40,7 @@ class Server(host: String, port: Int) {
             .start(WebApp(config))
     }
 
-    private fun diagnostics(): Application = Application {
+    private fun diagnostics() = Application {
         Response.ok().contentType("text/plain").done("All green.")
     }
 

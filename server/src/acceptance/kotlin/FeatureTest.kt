@@ -1,4 +1,5 @@
-import kickstart.CLI
+package kickstart
+
 import kickstart.models.Users
 import kickstart.storytelling.Actor
 import kickstart.storytelling.browsing.BrowseTheWeb
@@ -12,18 +13,18 @@ import kotlin.test.Test
 
 class FeatureTest {
 
-    val application = CLI.launch("-e", "acceptance", "-q", "true")
-
-    val actor = Actor.ableTo(BrowseTheWeb.withHisBrowser())
+    val app = App.start()
+    val actor = Actor.ableTo(BrowseTheWeb.using(hisBrowser))
 
     @BeforeTest
     fun start() {
-        actor.does(startUsing(application))
+        actor.does(startUsing(app))
     }
 
     @AfterTest
     fun stop() {
-        actor.does(stopUsing(application))
+        actor.does(stopUsing(app))
+        app.stop()
     }
 
     @Test
