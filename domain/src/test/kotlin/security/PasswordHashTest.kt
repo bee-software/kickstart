@@ -39,7 +39,7 @@ class PasswordHashTest {
     private fun salt(hash: PasswordHash): String {
         val params = hash.value.split(":")
         assertThat("hash components", params, hasSize(equalTo(3)))
-        val (iterations, salt, digest) = params
+        val (_, salt, _) = params
         return salt
     }
 }
