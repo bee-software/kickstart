@@ -58,14 +58,14 @@ Unpause the newly created pipeline and job:
 
 ````shell
 fly -t kickstart unpause-pipeline -p kickstart
-fly -t kickstart unpause-job --job kickstart/build
+fly -t kickstart unpause-job --job kickstart/test
 ````
 
-Access the pipeline URL http://127.0.0.1:8080/teams/main/pipelines/kickstart or follow the build in your terminal
+Access the pipeline URL http://localhost:8080/teams/main/pipelines/kickstart or follow the build in your terminal
 with:
 
 ````shell
-fly -t kickstart watch -j kickstart/build
+fly -t kickstart watch -j kickstart/test
 ````
 
 

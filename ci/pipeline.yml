@@ -1,17 +1,24 @@
 ---
 resources:
-  - name: sources
+  - name: code
     icon: github
     type: git
     source:
       uri: https://github.com/bee-software/kickstart.git
       branch: master
 
+  - name: gradle
+    type: docker-image
+    source:
+      repository: gradle
+      tag: 7.3.0-jdk17
+
 jobs:
-  - name: build
-    public: true
+  - name: test
     plan:
-      - get: sources
+      - get: code
+        params:
+          depth: 1
         trigger: true
-      - task: run-build
-        file: sources/ci/build.yml
+      - task: tests
+        file: code/ci/test.yml
