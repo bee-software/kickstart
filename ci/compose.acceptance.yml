@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    shm_size: 2gb
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "4444:4444"

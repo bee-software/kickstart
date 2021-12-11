@@ -1,17 +1,18 @@
 ---
 resources:
   - name: code
-    icon: github
     type: git
+    icon: github
     source:
       uri: https://github.com/bee-software/kickstart.git
       branch: master
 
-  - name: gradle
-    type: docker-image
+  - name: selenium-chrome
+    type: registry-image
+    icon: docker
     source:
-      repository: gradle
-      tag: 7.3.0-jdk17
+      repository: selenium/standalone-chrome
+#      tag: 96.0
 
 jobs:
   - name: test
@@ -22,3 +23,43 @@ jobs:
         trigger: true
       - task: tests
         file: code/ci/test.yml
+
+  - name: acceptance
+    plan:
+      - in_parallel:
+        - get: code
+          params:
+            depth: 1
+          passed: [test]
+          trigger: true
+        - get: selenium-chrome
+          params: {format: oci}
+      - task: acceptance-tests
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: testinfected/dcind-gradle
+              tag: 7-jdk17-alpine
+
+          # Cache the Gradle repository directory
+          caches:
+            - path: $HOME/.gradle
+          inputs:
+            - name: code
+            - name: selenium-chrome
+          run:
+            path: entrypoint.sh
+            args:
+              - bash
+              - -ceux
+              - |
+                cd code
+
+                docker compose -f ci/compose.acceptance.yml up -d
+                                
+                cp ci/ci.properties server/src/acceptance/resources/etc
+                SERVER_HOST=$(/sbin/ifconfig docker0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}') \
+                make acceptance env=ci
