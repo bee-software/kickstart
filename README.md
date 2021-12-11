@@ -62,7 +62,7 @@ fly -t kickstart unpause-job --job kickstart/test
 ````
 
 Access the pipeline URL http://localhost:8080/teams/main/pipelines/kickstart or follow the build in your terminal
-with:
+with, e.g.:
 
 ````shell
 fly -t kickstart watch -j kickstart/test

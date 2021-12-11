@@ -13,8 +13,13 @@ test:
 	@./gradlew test
 
 acceptance:
+ifdef env
+	@echo "Running acceptance tests of version ${VERSION} in environment ${env}"
+	@./gradlew acceptanceTest -Penv=${env}
+else
 	@echo "Running acceptance tests of version ${VERSION}..."
 	@./gradlew acceptanceTest
+endif
 
 build:
 	@echo "Building version ${VERSION}..."

@@ -13,6 +13,7 @@ object CLI {
 
     fun launch(vararg args: String): Server {
         val config = parse(args)
+        println("Starting in ${config[Settings.env]} environment...")
 
         val server = Server(config[Settings.server.host], config[Settings.server.port])
 
@@ -33,7 +34,7 @@ object CLI {
     @JvmStatic
     fun main(vararg args: String) {
         val server = launch(*args)
-        println("Server started: " + server.uri)
+        println("Server started. Access at ${server.uri}")
         Runtime.getRuntime().addShutdownHook(Thread {
             println("Stopped.")
             server.stop()

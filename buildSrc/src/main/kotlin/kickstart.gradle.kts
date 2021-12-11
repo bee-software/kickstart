@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -83,6 +84,13 @@ val acceptanceTest = tasks.register<Test>("acceptanceTest") {
             sourceSets.main.get().output +
             sourceSets["testkit"].output +
             acceptance.output
+
+    systemProperty("env.name", project.properties["env"] ?: "acceptance")
+
+    testLogging {
+        events("failed", "standardOut")
+        exceptionFormat = TestExceptionFormat.FULL
+    }
 
     shouldRunAfter(tasks.test)
 }
