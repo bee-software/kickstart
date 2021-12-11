@@ -62,4 +62,4 @@ jobs:
                                 
                 cp ci/ci.properties server/src/acceptance/resources/etc
                 SERVER_HOST=$(/sbin/ifconfig docker0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}') \
-                make acceptance env=ci
+                gradle acceptanceTest -Penv=ci

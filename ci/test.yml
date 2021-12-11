@@ -17,4 +17,4 @@ run:
     - -exc
     - |
       cd code
-      make test
+      gradle test
