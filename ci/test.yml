@@ -1,11 +1,10 @@
 platform: linux
 
-image_resource:
-  type: docker-image
+image:
+  type: registry-image
   source: { repository: gradle, tag: 7.3.0-jdk17 }
 
 # Cache the Gradle repository directory
-# todo check it actually helps or find a proper way
 caches:
   - path: $HOME/.gradle
 
@@ -18,4 +17,4 @@ run:
     - -exc
     - |
       cd code
-      gradle test
+      make test
