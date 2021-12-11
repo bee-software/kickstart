@@ -175,11 +175,13 @@ stop_docker() {
 #   and then pass it through to the task.
 # - When the image is passed to the task, Concourse can often get the image from its cache.
 load_images() {
+  echo "Preloading Docker images..."
   # Load images in OCI format
   while read -r image; do
+    "Found ${image}."
     docker load -i "${image}"
   done < <(find . -name 'image.tar' -type f)
-}
+  }
 
 start_docker
 trap stop_docker EXIT
