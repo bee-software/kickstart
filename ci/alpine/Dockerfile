@@ -1,12 +1,12 @@
 FROM gradle:7-jdk17-alpine
 
-ENV DOCKER_VERSION=20.10.10
+ARG DOCKER_VERSION=20.10.10
 ENV DOCKER_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz"
 
-ENV COMPOSE_VERSION=2.0.1
+ARG COMPOSE_VERSION=2.0.1
 ENV COMPOSE_URL="https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64"
 
-ENV COMPOSE_SWITCH_VERSION=1.0.2
+ARG COMPOSE_SWITCH_VERSION=1.0.2
 ENV COMPOSE_SWITCH_URL="https://github.com/docker/compose-switch/releases/download/v${COMPOSE_SWITCH_VERSION}/docker-compose-linux-amd64"
 
 RUN apk --update --no-cache add \
@@ -31,6 +31,7 @@ RUN apk --update --no-cache add \
     curl -fL ${COMPOSE_SWITCH_URL} -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
+COPY docker-lib.sh /docker-lib.sh
 COPY entrypoint.sh /bin/entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]
