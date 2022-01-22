@@ -11,11 +11,11 @@ class PasswordHashTest {
     fun `creates hash from clear text password`() {
         val hash = PasswordHash.create("clear password")
         assertThat("hash value", hash.value, !equalTo("clear password"))
-        assertThat("valid password", hash.checkPassword("clear password"), equalTo(true))
-        assertThat("invalid password", hash.checkPassword("wrong password"), equalTo(false))
+        assertThat("valid password", hash.validate("clear password"), equalTo(true))
+        assertThat("invalid password", hash.validate("wrong password"), equalTo(false))
 
         val same = PasswordHash.from(hash.value)
-        assertThat("same hash", same.checkPassword("clear password"), equalTo(true))
+        assertThat("same hash", same.validate("clear password"), equalTo(true))
     }
 
     @Test

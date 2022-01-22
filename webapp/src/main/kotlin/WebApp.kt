@@ -6,9 +6,7 @@ import com.vtence.molecule.Request
 import com.vtence.molecule.Response
 import kickstart.i18n.i18n
 import kickstart.i18n.locale
-import kickstart.security.Authenticator
-import kickstart.security.SessionsController
-import kickstart.security.User
+import kickstart.security.*
 import java.util.*
 
 class WebApp(config: Configuration) : Application {
@@ -19,9 +17,11 @@ class WebApp(config: Configuration) : Application {
     override fun handle(request: Request): Response {
         val views = i18n.localize(pages, checkNotNull(request.locale))
 
-        val authenticator = Authenticator { (email, password) ->
-            password.takeIf { it == "secret" }?.let { User(email) }
-        }
+        val authenticator = EmailPasswordAuthenticator(object : UserBase {
+            override fun findBy(username: Username): User {
+                return User(username, PasswordHash.create("secret") )
+            }
+        })
 
         val sessions = SessionsController(authenticator, views.named("sessions/new"))
         val home = HomeController(views.named("home"))

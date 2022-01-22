@@ -3,10 +3,13 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(libs.jmustache)
     implementation(libs.konfig)
     implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
 
+    testkitImplementation(project(path = ":domain", configuration = "testkit"))
     testkitImplementation(libs.skrapeit)
     testkitImplementation(libs.hamkrest)
 

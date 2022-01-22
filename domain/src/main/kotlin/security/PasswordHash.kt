@@ -13,7 +13,7 @@ class PasswordHash private constructor(
     val value: String
         get() = "$iterations:${salt.toHex()}:${hash.toHex()}"
 
-    fun checkPassword(candidate: String): Boolean {
+    fun validate(candidate: String): Boolean {
         // Compute the hash of the provided password, using the same salt, iteration count, and hash length
         val candidateHash = candidate.encrypt(salt, iterations, hash.size)
         // Passwords match if hashes match
