@@ -9,10 +9,12 @@ value class Username(val value: String): Serializable {
 
 class User(val username: Username, private val password: PasswordHash) {
 
+    val passwordHash: String by password::value
+
     fun checkPassword(secret: String) = password.validate(secret)
 
     companion object {
-        operator fun invoke(username: String) = User(Username(username), PasswordHash.create("secret"))
+        operator fun invoke(username: String, password: String) = User(Username(username), PasswordHash.create(password))
     }
 }
 

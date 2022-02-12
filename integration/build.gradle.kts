@@ -1,20 +1,16 @@
 plugins {
     id("kickstart")
+    id("org.flywaydb.flyway") version "8.4.3"
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":integration"))
-
-    implementation(libs.jmustache)
-    implementation(libs.konfig)
-    implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
+    implementation(libs.kabinet)
+    runtimeOnly(libs.postgres)
 
     testkitImplementation(project(path = ":domain", configuration = "testkit"))
-    testkitImplementation(libs.skrapeit)
     testkitImplementation(libs.hamkrest)
-
-    testImplementation(libs.hamcrest.library)
+    testkitImplementation(libs.flyway)
 }
 
 tasks.jar {

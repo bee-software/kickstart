@@ -16,7 +16,7 @@ class SessionsControllerTest {
 
     val view = TestView<Login>()
     val authenticator: Authenticator = Authenticator { (email, password) ->
-        password.takeIf { it == "secret" }?.let { User(email) }
+        password.takeIf { it == "secret" }?.let { User(email, password) }
     }
     val sessions = SessionsController(authenticator, view)
 
