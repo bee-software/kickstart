@@ -1,23 +1,30 @@
 ### Quick start
 
-Build the application with:
+#### Preparing the database
+
+Note: _You need a running database instance to run both the server and the test suites._
+
+To start a ready to go Postgres instance with Docker, run:
+
+```
+docker run --name=kickstart-db -v $(pwd)/scripts/postgres:/docker-entrypoint-initdb.d -p5432:5432 -e POSTGRES_PASSWORD=secret -d postgres
+```
+
+#### Building the application
+
+Build using Gradle with:
 
 ```shell
 make build 
 ```
 
-Run with:
+#### Starting the application
+
+Start the server from Gradle with:
 
 ```shell
 make run
 ```
-
-To start the server on a different port use:
-
-```shell
-SERVER_PORT=8080 make run
-```
-
 
 ### Running on Docker
 
@@ -54,10 +61,10 @@ fly --target kickstart sync
 
 #### Setting up the build pipeline
 
-Install the build pipeline in course by running:
+Install the build pipeline in concourse by running:
 
 ````shell
-fly -t kickstart set-pipeline -c ci/pipeline.yml -p kickstart
+fly -t kickstart set-pipeline -c scripts/ci/pipeline.yml -p kickstart
 ````
 
 Unpause the newly created pipeline and job:
@@ -73,8 +80,3 @@ with, e.g.:
 ````shell
 fly -t kickstart watch -j kickstart/test
 ````
-
-
-
-
-
