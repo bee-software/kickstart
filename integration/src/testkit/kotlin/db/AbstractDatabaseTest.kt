@@ -1,11 +1,11 @@
-package kickstart
+package kickstart.db
 
+import com.natpryce.konfig.ConfigurationProperties
+import com.natpryce.konfig.EnvironmentVariables
+import com.natpryce.konfig.overriding
 import com.vtence.kabinet.StatementExecutor
 import com.vtence.kabinet.Table
-import kickstart.db.DataSources
-import kickstart.db.DatabaseCleaner
-import kickstart.db.DatabaseMigrator
-import kickstart.db.JdbcTransactor
+import kickstart.UnitOfWork
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -13,9 +13,16 @@ import java.util.logging.Level
 import java.util.logging.LogManager
 import java.util.logging.Logger
 
+
+private val test =
+    ConfigurationProperties.systemProperties() overriding
+    EnvironmentVariables() overriding
+    ConfigurationProperties.fromResource("db.properties")
+
+
 abstract class AbstractDatabaseTest {
 
-    private val dataSource = DataSources.test(9999)
+    private val dataSource = DataSources.configure(config = test)
     private var connection = dataSource.connection
     private val transactor = JdbcTransactor(connection)
 

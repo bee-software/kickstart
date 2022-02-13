@@ -10,6 +10,7 @@ dependencies {
 
     testkitImplementation(project(path = ":domain", configuration = "testkit"))
     testkitImplementation(libs.hamkrest)
+    testkitImplementation(libs.konfig)
     testkitImplementation(libs.flyway)
 }
 

@@ -2,15 +2,13 @@ package kickstart.security
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
-import kickstart.AbstractDatabaseTest
+import kickstart.db.AbstractDatabaseTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import security.UserBuilder
 import security.UserThat.hasSameStateAs
 import security.UserThat.hasUsername
 import security.Users
-import security.user
 import java.sql.SQLException
 
 class UsersDatabaseTest : AbstractDatabaseTest() {

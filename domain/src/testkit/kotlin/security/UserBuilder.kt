@@ -1,7 +1,6 @@
-package security
+package kickstart.security
 
 import kickstart.Builder
-import kickstart.security.User
 
 class UserBuilder(
     var username: String = "john.doe",

@@ -1,18 +1,41 @@
 package kickstart.db
 
 
+import com.natpryce.konfig.*
 import com.vtence.kabinet.AutoSelectDataSource
 import com.vtence.kabinet.Delete
 import com.vtence.kabinet.StatementExecutor
 import com.vtence.kabinet.Table
 import kickstart.Transactor
+import kickstart.db.DatabaseConfiguration.db.driver
+import kickstart.db.DatabaseConfiguration.db.host
+import kickstart.db.DatabaseConfiguration.db.name
+import kickstart.db.DatabaseConfiguration.db.password
+import kickstart.db.DatabaseConfiguration.db.port
+import kickstart.db.DatabaseConfiguration.db.user
 import org.flywaydb.core.Flyway
 import javax.sql.DataSource
 
 
+object DatabaseConfiguration {
+    object db : PropertyGroup() {
+        val driver by stringType
+        val host by stringType
+        val port by intType
+        val name by stringType
+        val user by stringType
+        val password by stringType
+    }
+}
+
 object DataSources {
-    fun test(port: Int = 5432): DataSource {
-        return AutoSelectDataSource("jdbc:postgresql://127.0.0.1:$port/kickstart_test", "test", "test", autoCommit = false)
+    fun configure(config: Configuration): DataSource {
+        return AutoSelectDataSource(
+            "jdbc:${config[driver]}://${config[host]}:${config[port]}/${config[name]}",
+            config[user],
+            config[password],
+            autoCommit = false
+        )
     }
 }
 
