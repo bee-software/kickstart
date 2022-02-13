@@ -1,6 +1,6 @@
 ---
 resources:
-  - name: code
+  - name: sources
     type: git
     icon: github
     source:
@@ -17,17 +17,17 @@ resources:
 jobs:
   - name: test
     plan:
-      - get: code
+      - get: sources
         params:
           depth: 1
         trigger: true
       - task: tests
-        file: code/ci/test.yml
+        file: sources/scripts/ci/test.yml
 
   - name: acceptance
     plan:
       - in_parallel:
-        - get: code
+        - get: sources
           params:
             depth: 1
           passed: [test]
@@ -36,4 +36,4 @@ jobs:
           params: {format: oci}
       - task: acceptance-tests
         privileged: true
-        file: code/ci/acceptance.yml
+        file: sources/scripts/ci/acceptance.yml

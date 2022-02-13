@@ -10,7 +10,7 @@ image_resource:
 caches:
   - path: $HOME/.gradle
 inputs:
-  - name: code
+  - name: sources
   - name: selenium-chrome
 run:
   path: entrypoint.sh
@@ -18,10 +18,10 @@ run:
     - bash
     - -ceux
     - |
-      cd code
+      cd sources
       
-      docker compose -f ci/compose.acceptance.yml up -d
+      docker compose -f scripts/ci/compose.acceptance.yml up -d
       
-      cp ci/ci.properties server/src/acceptance/resources/etc
+      cp scripts/ci/ci.properties server/src/acceptance/resources/etc
       SERVER_HOST=$(/sbin/ifconfig docker0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}') \
       gradle acceptanceTest -Penv=ci

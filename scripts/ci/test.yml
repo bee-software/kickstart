@@ -9,12 +9,12 @@ caches:
   - path: $HOME/.gradle
 
 inputs:
-  - name: code
+  - name: sources
 
 run:
   path: bash
   args:
     - -exc
     - |
-      cd code
+      cd sources
       gradle test
