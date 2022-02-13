@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver
 
 
 private val env
-    get() = System.getProperty("env.name", "acceptance")
+    get() = System.getProperty("env.name", "test")
 
 
 object App {

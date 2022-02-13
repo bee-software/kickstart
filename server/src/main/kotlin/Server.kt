@@ -33,7 +33,8 @@ class Server(host: String, port: Int) {
             .add(staticAssets(config[Settings.www.root]))
             .mount("/status", diagnostics())
             .add(Cookies())
-            .add(LocaleSelector.usingDefaultLocale(config[Settings.www.lang])
+            .add(LocaleSelector
+                .usingDefaultLocale(config[Settings.www.lang])
                 .alsoSupporting(Locale.CANADA_FRENCH, Locale.CANADA))
             .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
             .add(PublicExceptions(config[Settings.www.root]))

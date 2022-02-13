@@ -69,6 +69,8 @@ configurations[acceptance.runtimeOnlyConfigurationName].extendsFrom(configuratio
 tasks.test {
     useJUnitPlatform()
 
+    project.properties["env"]?.let { systemProperty("env.name", it) }
+
     testLogging {
         events("failed", "standardOut")
     }
@@ -85,7 +87,7 @@ val acceptanceTest = tasks.register<Test>("acceptanceTest") {
             sourceSets["testkit"].output +
             acceptance.output
 
-    systemProperty("env.name", project.properties["env"] ?: "acceptance")
+    project.properties["env"]?.let { systemProperty("env.name", it) }
 
     testLogging {
         events("failed", "standardOut")

@@ -14,10 +14,14 @@ import java.util.logging.LogManager
 import java.util.logging.Logger
 
 
+private val env
+    get() = System.getProperty("env.name", "test")
+
+
 private val test =
     ConfigurationProperties.systemProperties() overriding
     EnvironmentVariables() overriding
-    ConfigurationProperties.fromResource("db.properties")
+    ConfigurationProperties.fromResource("etc/$env.properties")
 
 
 abstract class AbstractDatabaseTest {

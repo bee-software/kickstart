@@ -8,22 +8,20 @@ clean:
 	@echo "Cleaning..."
 	@./gradlew clean
 
+test: ENV=test
 test:
-	@echo "Running tests of version ${VERSION}..."
-	@./gradlew test
+	@echo "Running tests of version ${VERSION}... in ${ENV} environment"
+	@./gradlew test -Penv=${ENV}
 
+acceptance: ENV=test
 acceptance:
-ifdef env
-	@echo "Running acceptance tests of version ${VERSION} in environment ${env}"
-	@./gradlew acceptanceTest -Penv=${env}
-else
-	@echo "Running acceptance tests of version ${VERSION}..."
-	@./gradlew acceptanceTest
-endif
+	@echo "Running acceptance tests of version ${VERSION} in ${ENV} environment"
+	@./gradlew acceptanceTest -Penv=${ENV}
 
+build: ENV=test
 build:
 	@echo "Building version ${VERSION}..."
-	@./gradlew build
+	@./gradlew build -Penv=${ENV}
 
 run:
 	@echo "Starting server version ${VERSION}..."
