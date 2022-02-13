@@ -12,6 +12,12 @@ Run with:
 make run
 ```
 
+To start the server on a different port use:
+
+```shell
+SERVER_PORT=8080 make run
+```
+
 
 ### Running on Docker
 

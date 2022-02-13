@@ -27,6 +27,7 @@ object CLI {
                 ConfigurationMap("env" to "dev", "quiet" to "false")
 
         return options overriding
+                ConfigurationProperties.systemProperties() overriding
                 EnvironmentVariables() overriding
                 EnvironmentFile.load(options[Settings.env])
     }
