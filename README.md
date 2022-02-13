@@ -39,6 +39,39 @@ To run the previously built docker image, e.g.:
 docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "WWW_ROOT=/www" bee-software/kickstart 
 ````
 
+### Advanced Configuration
+
+Configuration uses properties file named after the environment: 
+
+* `etc/test.properties` for the test environment
+* `etc/dev.properties` for the dev environment
+
+Configuration can be overridden from the command line using environment variables.
+For instance to run tests against an existing Postgres database running on port `54320`:
+
+```shell
+DB_PORT=54320 make run
+```
+
+To run the server on a different port, you can either set the `SERVER_PORT` environment variable, such as:
+
+```shell
+SERVER_PORT=8080 make run
+```
+
+or use the shortcut form:
+
+```shell
+make run PORT=8080
+```
+
+To run the build against a different environment, say `integration`, for which you will need to provide
+an `etc/integration.properties` file on the classpath:
+
+```shell
+make build ENV=integration
+```
+
 
 ### Running Concourse
 

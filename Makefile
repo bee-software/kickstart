@@ -23,9 +23,11 @@ build:
 	@echo "Building version ${VERSION}..."
 	@./gradlew build -Penv=${ENV}
 
+run: ENV=dev
+run: PORT=8080
 run:
-	@echo "Starting server version ${VERSION}..."
-	@./gradlew run
+	@echo "Starting server version ${VERSION}... in ${ENV} environment"
+	@./gradlew run --args="-e ${ENV} -p ${PORT}"
 
 docker-image:
 	@echo "Building image ${VERSION}..."
