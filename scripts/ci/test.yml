@@ -16,5 +16,20 @@ run:
   args:
     - -exc
     - |
+      # Install Postgres
+      apt-get update
+      apt-get install -y postgresql
+      
+      # Allow access from any local client as `postgres` and other network users must provide a password
+      cat > /etc/postgresql/*/main/pg_hba.conf <<-EOF
+      local   all   postgres   trust
+      host    all   all        0.0.0.0/0 md5
+      EOF
+      
+      # Start Postgres
+      service postgresql restart
+      # Create databases, including the test database
+      psql -U postgres -f sources/scripts/postgres/create-databases.sql postgres
+      
       cd sources
       gradle test
