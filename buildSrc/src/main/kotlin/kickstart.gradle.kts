@@ -73,6 +73,10 @@ tasks.test {
 
     testLogging {
         events("failed", "standardOut")
+        showExceptions = true
+        showStackTraces = true
+        showCauses = true
+        exceptionFormat = TestExceptionFormat.FULL
     }
 }
 
