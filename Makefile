@@ -10,12 +10,12 @@ clean:
 
 test: ENV=test
 test:
-	@echo "Running tests of version ${VERSION}... in ${ENV} environment"
+	@echo "Running tests of version ${VERSION} in ${ENV} environment..."
 	@./gradlew test -Penv=${ENV}
 
 acceptance: ENV=test
 acceptance:
-	@echo "Running acceptance tests of version ${VERSION} in ${ENV} environment"
+	@echo "Running acceptance tests of version ${VERSION} in ${ENV} environment..."
 	@./gradlew acceptanceTest -Penv=${ENV}
 
 build: ENV=test
@@ -26,7 +26,7 @@ build:
 run: ENV=dev
 run: PORT=8080
 run:
-	@echo "Starting server version ${VERSION}... in ${ENV} environment"
+	@echo "Starting server version ${VERSION} in ${ENV} environment..."
 	@./gradlew run --args="-e ${ENV} -p ${PORT}"
 
 docker-image:
