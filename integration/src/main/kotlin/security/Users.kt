@@ -1,4 +1,4 @@
-package security
+package kickstart.security
 
 import com.vtence.kabinet.*
 import kickstart.security.PasswordHash

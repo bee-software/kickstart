@@ -4,9 +4,6 @@ import com.vtence.kabinet.StatementExecutor
 import com.vtence.kabinet.insert
 import com.vtence.kabinet.selectWhere
 import kickstart.db.eq
-import security.Users
-import security.record
-import security.user
 
 class UsersDatabase(private val db: StatementExecutor) : UserBase {
 
