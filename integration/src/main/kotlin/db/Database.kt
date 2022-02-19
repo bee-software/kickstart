@@ -1,14 +1,10 @@
 package kickstart.db
 
-
 import com.natpryce.konfig.*
 import com.vtence.kabinet.AutoSelectDataSource
-import com.vtence.kabinet.Delete
-import com.vtence.kabinet.StatementExecutor
-import com.vtence.kabinet.Table
-import kickstart.Transactor
 import kickstart.db.DatabaseConfiguration.db.driver
 import kickstart.db.DatabaseConfiguration.db.host
+import kickstart.db.DatabaseConfiguration.db.migrate
 import kickstart.db.DatabaseConfiguration.db.name
 import kickstart.db.DatabaseConfiguration.db.password
 import kickstart.db.DatabaseConfiguration.db.port
@@ -25,6 +21,7 @@ object DatabaseConfiguration {
         val name by stringType
         val user by stringType
         val password by stringType
+        val migrate by booleanType
     }
 }
 
@@ -35,14 +32,14 @@ object DataSources {
             config[user],
             config[password],
             autoCommit = false
-        )
+        ).also {
+            if (config[migrate]) DatabaseMigrator(it).migrate()
+        }
     }
 }
 
-
 class DatabaseMigrator(dataSource: DataSource) {
-    private val flyway = Flyway
-        .configure()
+    private val flyway = Flyway.configure()
         .sqlMigrationPrefix("")
         .sqlMigrationSeparator("_")
         .dataSource(dataSource)
@@ -52,18 +49,5 @@ class DatabaseMigrator(dataSource: DataSource) {
 
     fun migrate() {
         flyway.migrate()
-    }
-}
-
-class DatabaseCleaner(private val transactor: Transactor, private val executor: StatementExecutor) {
-
-    fun clean(vararg tables: Table) {
-        tables.map { delete(it) }
-    }
-
-    private fun delete(table: Table) {
-        transactor {
-            Delete.from(table).execute(executor)
-        }
     }
 }
