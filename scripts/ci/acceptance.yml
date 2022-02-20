@@ -12,6 +12,7 @@ caches:
 inputs:
   - name: sources
   - name: selenium-chrome
+  - name: postgres
 run:
   path: entrypoint.sh
   args:

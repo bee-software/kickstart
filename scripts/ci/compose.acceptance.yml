@@ -13,5 +13,7 @@ services:
     image: postgres
     ports:
       - "5432:5432"
-    volumes:
-      - ../postgres:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=kickstart
+      - POSTGRES_PASSWORD=kickstart
+      - POSTGRES_DB=kickstart_acceptance
