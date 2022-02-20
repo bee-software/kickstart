@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import security.UserThat.hasSameStateAs
 import security.UserThat.hasUsername
-import security.Users
-import security.UsersDatabase
 import java.sql.SQLException
 
 class UsersDatabaseTest : AbstractDatabaseTest() {

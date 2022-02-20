@@ -8,3 +8,10 @@ services:
       - "host.docker.internal:host-gateway"
     ports:
       - "4444:4444"
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../postgres:/docker-entrypoint-initdb

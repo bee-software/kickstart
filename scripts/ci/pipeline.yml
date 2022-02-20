@@ -14,6 +14,12 @@ resources:
       repository: selenium/standalone-chrome
 #      tag: 96.0
 
+  - name: postgres
+    type: registry-image
+    icon: docker
+    source:
+      repository: postgres
+
 jobs:
   - name: test
     plan:
