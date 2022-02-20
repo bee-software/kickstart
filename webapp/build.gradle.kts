@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":integration"))
 
     implementation(libs.jmustache)
+    implementation(libs.kabinet)
     implementation(libs.konfig)
     implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
 

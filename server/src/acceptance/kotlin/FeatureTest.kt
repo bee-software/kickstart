@@ -1,6 +1,6 @@
 package kickstart
 
-import kickstart.models.Users
+import kickstart.models.Identities
 import kickstart.storytelling.Actor
 import kickstart.storytelling.browsing.BrowseTheWeb
 import kickstart.tasks.signInAs
@@ -30,7 +30,7 @@ class FeatureTest {
     @Test
     fun `example scenario`() {
         actor.wasAbleTo(
-            signInAs(Users.bob),
+            signInAs(Identities.bob),
             signOut()
         )
     }

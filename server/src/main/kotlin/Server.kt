@@ -25,19 +25,24 @@ class Server(host: String, port: Int) {
     fun resolve(path: URI): URI = uri.resolve(path)
 
     fun start(config: Configuration) {
+        val context = ApplicationContext.load(config)
+
         webServer.failureReporter(this::errorLogger)
             .add(ServerHeader("Simple/6.0.1"))
             .add(DateHeader(Clock.systemDefaultZone()))
             .add(HttpMethodOverride())
             .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), config[Settings.www.lang]))
             .add(staticAssets(config[Settings.www.root]))
+            .add(Failsafe())
+            .add(FailureMonitor(this@Server::errorLogger))
+            .add(ConnectionScope(context.dataSource))
             .add(Cookies())
             .add(LocaleSelector
                 .usingDefaultLocale(config[Settings.www.lang])
                 .alsoSupporting(Locale.CANADA_FRENCH, Locale.CANADA))
             .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
             .add(PublicExceptions(config[Settings.www.root]))
-            .start(WebApp(config))
+            .start(WebApp(context))
     }
 
     fun stop() {
