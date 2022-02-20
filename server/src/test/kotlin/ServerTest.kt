@@ -14,7 +14,8 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 
 class ServerTest {
-    val server = Server("localhost", 19999)
+    val config = EnvironmentFile.load("test")
+    val server = Server(config[Settings.server.host], config[Settings.server.port])
 
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder(server.uri)
@@ -24,7 +25,7 @@ class ServerTest {
     @BeforeEach
     fun `start server`() {
         server.logger = log.sink
-        server.start(EnvironmentFile.load("test"))
+        server.start(config)
     }
 
     @AfterEach
@@ -76,7 +77,7 @@ class ServerTest {
     }
 
     @Test
-    fun `renders dynamic content as html utf 8 encoded`() {
+    fun `renders dynamic content as html utf-8 encoded`() {
         val response = client.send(request.GET(server.resolve("/en")))
 
         assertThat(response).isOK
