@@ -40,6 +40,8 @@ jobs:
           trigger: true
         - get: selenium-chrome
           params: {format: oci}
+        - get: postgres
+          params: {format: oci}
       - task: acceptance-tests
         privileged: true
         file: sources/scripts/ci/acceptance.yml
