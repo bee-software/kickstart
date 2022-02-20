@@ -31,7 +31,6 @@ class Server(host: String, port: Int) {
             .add(HttpMethodOverride())
             .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), config[Settings.www.lang]))
             .add(staticAssets(config[Settings.www.root]))
-            .mount("/status", diagnostics())
             .add(Cookies())
             .add(LocaleSelector
                 .usingDefaultLocale(config[Settings.www.lang])
@@ -39,10 +38,6 @@ class Server(host: String, port: Int) {
             .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
             .add(PublicExceptions(config[Settings.www.root]))
             .start(WebApp(config))
-    }
-
-    private fun diagnostics() = Application {
-        Response.ok().contentType("text/plain").done("All green.")
     }
 
     fun stop() {

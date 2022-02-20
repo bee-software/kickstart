@@ -7,6 +7,7 @@ import com.vtence.molecule.Response
 import kickstart.i18n.i18n
 import kickstart.i18n.locale
 import kickstart.security.*
+import kickstart.telemetry.StatusEndpoint
 import java.util.*
 
 class WebApp(config: Configuration) : Application {
@@ -23,6 +24,7 @@ class WebApp(config: Configuration) : Application {
             }
         })
 
+        val status = StatusEndpoint()
         val sessions = SessionsController(authenticator, views.named("sessions/new"))
         val home = HomeController(views.named("home"))
 
@@ -30,6 +32,7 @@ class WebApp(config: Configuration) : Application {
             get("/login").to { sessions.new(it) }
             post("/login").to { sessions.create(it) }
             delete("/logout").to { sessions.delete(it) }
+            get("/status").to { status.get(it)}
             get("/").to { home.render(it) }
         }
 

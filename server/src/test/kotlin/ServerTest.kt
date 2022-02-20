@@ -34,7 +34,7 @@ class ServerTest {
 
     @Test
     fun `is alive`() {
-        val response = client.send(request.GET(server.resolve("/status")))
+        val response = client.send(request.GET(server.resolve("/en/status")))
 
         assertThat(response).isOK.hasBody("All green.")
     }
@@ -54,13 +54,13 @@ class ServerTest {
 
     @Test
     fun `logs all accesses`() {
-        val response = client.send(request.GET(server.resolve("/status")))
+        val response = client.send(request.GET(server.resolve("/en/status")))
 
         assertThat(response).isOK
 
         assertThat(
             "log output", log.lines, anyElement(
-                containsSubstring("\"GET /status HTTP/1.1\" 200")
+                containsSubstring("\"GET /en/status HTTP/1.1\" 200")
             )
         )
     }
