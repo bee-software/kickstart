@@ -1,8 +1,6 @@
 package kickstart
 
 import com.natpryce.konfig.Configuration
-import com.vtence.molecule.Application
-import com.vtence.molecule.Response
 import com.vtence.molecule.WebServer
 import com.vtence.molecule.middlewares.*
 import com.vtence.molecule.session.CookieSessionStore
@@ -29,19 +27,19 @@ class Server(host: String, port: Int) {
 
         webServer.failureReporter(this::errorLogger)
             .add(ServerHeader("Simple/6.0.1"))
-            .add(DateHeader(Clock.systemDefaultZone()))
+            .add(DateHeader(context.clock))
             .add(HttpMethodOverride())
-            .add(ApacheCommonLogger(logger, Clock.systemDefaultZone(), config[Settings.www.lang]))
-            .add(staticAssets(config[Settings.www.root]))
+            .add(ApacheCommonLogger(logger, context.clock, context.defaultLocale))
+            .add(staticAssets(context.root))
             .add(Failsafe())
             .add(FailureMonitor(this@Server::errorLogger))
             .add(ConnectionScope(context.dataSource))
             .add(Cookies())
             .add(LocaleSelector
-                .usingDefaultLocale(config[Settings.www.lang])
-                .alsoSupporting(Locale.CANADA_FRENCH, Locale.CANADA))
-            .add(CookieSessionTracker(CookieSessionStore.secure("super secret key")))
-            .add(PublicExceptions(config[Settings.www.root]))
+                .usingDefaultLocale(context.defaultLocale)
+                .alsoSupporting(context.supportedLocales))
+            .add(CookieSessionTracker(CookieSessionStore.secure(context.sessionKey)))
+            .add(PublicExceptions(context.root))
             .start(WebApp(context))
     }
 
