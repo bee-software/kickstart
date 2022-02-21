@@ -8,23 +8,19 @@ object CLI {
         CommandLineOption(Settings.env, long = "env", short = "e"),
         CommandLineOption(Settings.server.host, long = "host"),
         CommandLineOption(Settings.server.port, long = "port", short = "p"),
-        CommandLineOption(Settings.quiet, long = "quiet", short = "q")
+        CommandLineOption(Settings.server.quiet, long = "quiet", short = "q")
     )
 
     fun launch(vararg args: String): Server {
         val config = parse(args)
         println("Starting in ${config[Settings.env]} environment...")
-
         val server = Server(config[Settings.server.host], config[Settings.server.port])
-
-        if (!config[Settings.quiet]) server.logger = Loggers.toConsole(Level.ALL)
         server.start(config)
         return server
     }
 
     private fun parse(args: Array<out String>): Configuration {
-        val (options, _) = parseArgs(arrayOf(*args), *options) overriding
-                ConfigurationMap("env" to "dev", "quiet" to "false")
+        val (options, _) = parseArgs(arrayOf(*args), *options) overriding ConfigurationMap("env" to "dev")
 
         return options overriding
                 ConfigurationProperties.systemProperties() overriding

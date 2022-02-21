@@ -2,6 +2,7 @@ package kickstart
 
 import com.natpryce.konfig.Configuration
 import com.vtence.kabinet.StatementExecutor
+import com.vtence.molecule.FailureReporter
 import com.vtence.molecule.Request
 import kickstart.db.DataSources
 import kickstart.i18n.i18n
@@ -11,6 +12,8 @@ import kickstart.telemetry.TelemetryModule
 import java.nio.file.Path
 import java.time.Clock
 import java.util.*
+import java.util.logging.Level
+import java.util.logging.Logger
 import javax.sql.DataSource
 
 
@@ -20,6 +23,8 @@ class ApplicationContext private constructor(config: Configuration) {
     val supportedLocales: Iterable<Locale> = listOf(Locale.CANADA_FRENCH, Locale.CANADA)
     val clock: Clock = Clock.systemDefaultZone()
     val sessionKey: String = "super secret key"
+    val logger: Logger = if (config[Settings.server.quiet]) Loggers.off() else Loggers.toConsole(Level.ALL)
+    val errorReporter: FailureReporter = ErrorLogger(logger)
     val dataSource: DataSource = DataSources.configure(config)
 
     private val pages = pages(root)

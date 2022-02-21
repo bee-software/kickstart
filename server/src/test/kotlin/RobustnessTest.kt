@@ -19,11 +19,6 @@ class RobustnessTest {
     val request = HttpRequest.newBuilder(server.uri)
 
     @BeforeEach
-    fun `turn off logging`() {
-        Loggers.off()
-    }
-
-    @BeforeEach
     fun `start server`() {
         server.start(config)
     }

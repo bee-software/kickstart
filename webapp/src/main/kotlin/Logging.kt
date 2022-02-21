@@ -1,5 +1,6 @@
 package kickstart
 
+import com.vtence.molecule.FailureReporter
 import java.io.OutputStream
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -43,6 +44,14 @@ class PlainFormatter : Formatter() {
         var msg = "${record.level}: ${record.message}\n"
         record.thrown?.let { msg += "${record.thrown.stackTrace()}\n" }
         return msg
+    }
+}
+
+
+class ErrorLogger(private val logger: Logger): FailureReporter {
+
+    override fun errorOccurred(error: Throwable) {
+        logger.log(Level.SEVERE, "Internal server error", error)
     }
 }
 

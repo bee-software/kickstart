@@ -7,10 +7,6 @@ import com.vtence.molecule.session.CookieSessionStore
 import kickstart.i18n.LocaleSelector
 import java.net.URI
 import java.nio.file.Path
-import java.time.Clock
-import java.util.*
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class Server(host: String, port: Int) {
 
@@ -18,21 +14,19 @@ class Server(host: String, port: Int) {
 
     val uri: URI get() = webServer.uri()
 
-    var logger: Logger = Loggers.off()
-
     fun resolve(path: URI): URI = uri.resolve(path)
 
     fun start(config: Configuration) {
         val context = ApplicationContext.load(config)
 
-        webServer.failureReporter(this::errorLogger)
+        webServer.failureReporter(context.errorReporter)
             .add(ServerHeader("Simple/6.0.1"))
             .add(DateHeader(context.clock))
             .add(HttpMethodOverride())
-            .add(ApacheCommonLogger(logger, context.clock, context.defaultLocale))
+            .add(ApacheCommonLogger(context.logger, context.clock, context.defaultLocale))
             .add(staticAssets(context.root))
             .add(Failsafe())
-            .add(FailureMonitor(this@Server::errorLogger))
+            .add(FailureMonitor(context.errorReporter))
             .add(ConnectionScope(context.dataSource))
             .add(Cookies())
             .add(LocaleSelector
@@ -45,10 +39,6 @@ class Server(host: String, port: Int) {
 
     fun stop() {
         webServer.stop()
-    }
-
-    private fun errorLogger(error: Throwable) {
-        logger.log(Level.SEVERE, "Internal server error", error)
     }
 }
 

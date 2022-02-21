@@ -3,6 +3,8 @@ package kickstart
 import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.containsSubstring
+import com.natpryce.konfig.ConfigurationMap
+import com.natpryce.konfig.overriding
 import com.vtence.molecule.http.HeaderNames
 import com.vtence.molecule.testing.http.HttpResponseAssert.assertThat
 import org.hamcrest.Matchers.containsString
@@ -14,23 +16,24 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 
 class ServerTest {
-    val config = EnvironmentFile.load("test")
-    val server = Server(config[Settings.server.host], config[Settings.server.port])
+    val config =
+        ConfigurationMap("server.quiet" to "false") overriding EnvironmentFile.load("test")
 
+    val server = Server(config[Settings.server.host], config[Settings.server.port])
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder(server.uri)
 
-    val log = LogCapture()
+    val console = ConsoleOutput.capture()
 
     @BeforeEach
     fun `start server`() {
-        server.logger = log.sink
         server.start(config)
     }
 
     @AfterEach
     fun `stop server`() {
         server.stop()
+        console.release()
     }
 
     @Test
@@ -60,7 +63,7 @@ class ServerTest {
         assertThat(response).isOK
 
         assertThat(
-            "log output", log.lines, anyElement(
+            "log output", console.lines, anyElement(
                 containsSubstring("\"GET /en/status HTTP/1.1\" 200")
             )
         )
