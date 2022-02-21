@@ -1,12 +1,9 @@
 package kickstart
 
 import com.vtence.molecule.Request
-import com.vtence.molecule.middlewares.FileServer
-import com.vtence.molecule.middlewares.StaticAssets
 import com.vtence.molecule.routing.RouteBuilder
 import com.vtence.molecule.routing.RouteSet
 import com.vtence.molecule.routing.Routes
-import java.nio.file.Path
 
 
 fun routes(definition: Routes.() -> Unit): RouteBuilder = Routes().apply(definition)
@@ -27,4 +24,3 @@ operator fun Request.get(name: String): String? = this.parameter(name)
 
 operator fun Request.set(name: String, value: String?): Request = this.addParameter(name, value)
 
-fun assets(path: Path, builder: StaticAssets.() -> Unit) = StaticAssets(FileServer(path.toFile())).apply(builder)

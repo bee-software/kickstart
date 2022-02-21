@@ -24,7 +24,7 @@ class Server(host: String, port: Int) {
             .add(DateHeader(context.clock))
             .add(HttpMethodOverride())
             .add(ApacheCommonLogger(context.logger, context.clock, context.defaultLocale))
-            .add(staticAssets(context.root))
+            .add(assets(context.root))
             .add(Failsafe())
             .add(FailureMonitor(context.errorReporter))
             .add(ConnectionScope(context.dataSource))
@@ -45,9 +45,4 @@ class Server(host: String, port: Int) {
 
 fun Server.resolve(path: String) = resolve(URI.create(path))
 
-private fun staticAssets(root: Path) = assets(root.resolve("assets")) {
-    serve("/favicon", "/apple-touch-icon", "/safari-pinned-tab", "/android-chrome")
-    serve("/css")
-    serve("/fomantic")
-}
 
