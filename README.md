@@ -85,7 +85,7 @@ make build ENV=integration
 
 #### Starting Concourse
 
-To start Concourse, the CI server, run:
+To start [Concourse](https://concourse-ci.org), the CI server, run:
 
 ````shell
 docker compose -f concourse.yml up -d
