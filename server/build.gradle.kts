@@ -1,7 +1,7 @@
 plugins {
     id("kickstart")
     application
-    id("com.google.cloud.tools.jib")
+    id("com.google.cloud.tools.jib") version "3.2.0"
 }
 
 application {
