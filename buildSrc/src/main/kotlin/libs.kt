@@ -1,7 +1,7 @@
 object libs {
     val faker = "io.github.serpro69:kotlin-faker:1.7.1"
 
-    val flyway = "org.flywaydb:flyway-core:8.4.2"
+    val flyway = "org.flywaydb:flyway-core:8.5.1"
 
     object hamcrest {
         val library = "org.hamcrest:hamcrest:2.2"
@@ -25,7 +25,7 @@ object libs {
 
     val molecule = "com.vtence.molecule:molecule:0.15.0-SNAPSHOT"
 
-    val postgres = "org.postgresql:postgresql:42.3.1"
+    val postgres = "org.postgresql:postgresql:42.3.3"
 
     val skrapeit = "it.skrape:skrapeit:1.1.1"
 
