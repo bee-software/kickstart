@@ -2,8 +2,8 @@ plugins {
     id("kickstart")
     application
     id("com.google.cloud.tools.jib") version "3.2.0"
-`    id("org.graalvm.buildtools.native") version "0.9.10"
-`}
+    id("org.graalvm.buildtools.native") version "0.9.10"
+}
 
 application {
     mainClass.set("kickstart.CLI")
