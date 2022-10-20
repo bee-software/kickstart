@@ -28,6 +28,7 @@ jobs:
           depth: 1
         trigger: true
       - task: tests
+        privileged: true
         file: sources/scripts/ci/test.yml
 
   - name: acceptance
