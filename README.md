@@ -39,17 +39,22 @@ To build a docker image to your local docker daemon:
 make docker-image
 ```
 
-To run the previously built docker image, e.g.:
+To run the previously built docker image against a local Postgres instance on OSX:
 ````shell
 docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "WWW_ROOT=/www" bee-software/kickstart 
 ````
 
-You can now sign in with `guest/password`.
+To run the previously built docker image against a Postgres instance in Docker on OSX:
+````shell
+docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "DB_HOST=docker.for.mac.localhost" -e "WWW_ROOT=/www" bee-software/kickstart 
+````
+
+You can now sign in at `http://localhost:8080` with `guest/password`.
 
 
 ### Advanced Configuration
 
-Configuration uses properties file named after the environment: 
+Configuration uses properties files named after the environment: 
 
 * `etc/test.properties` for the test environment
 * `etc/dev.properties` for the dev environment
