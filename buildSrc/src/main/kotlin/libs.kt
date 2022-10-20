@@ -25,7 +25,7 @@ object libs {
 
     val minutest = "dev.minutest:minutest:2.0.0-rc4"
 
-    val molecule = "com.vtence.molecule:molecule:0.15.0-SNAPSHOT"
+    val molecule = "com.vtence.molecule:molecule:0.15.0"
 
     val postgres = "org.postgresql:postgresql:42.3.3"
 

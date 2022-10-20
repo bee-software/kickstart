@@ -9,15 +9,6 @@ val buildNumber by extra("0")
 
 repositories {
     mavenCentral()
-
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
-
-configurations.all {
-    // check for updates every build
-    resolutionStrategy.cacheChangingModulesFor(0, "seconds")
 }
 
 java {

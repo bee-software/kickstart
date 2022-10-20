@@ -13,7 +13,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":webapp"))
     implementation(libs.konfig)
-    implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
+    implementation(libs.molecule)
 
     runtimeOnly(libs.simple)
 
