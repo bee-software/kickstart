@@ -1,7 +1,7 @@
 object libs {
     val faker = "io.github.serpro69:kotlin-faker:1.7.1"
 
-    val flyway = "org.flywaydb:flyway-core:8.5.1"
+    val flyway = "org.flywaydb:flyway-core:9.5.1"
 
     object hamcrest {
         val library = "org.hamcrest:hamcrest:2.2"
