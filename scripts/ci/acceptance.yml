@@ -23,4 +23,5 @@ run:
       cp scripts/ci/ci.properties server/src/acceptance/resources/etc
       
       docker compose -f scripts/ci/compose.acceptance.yml up -d
-      SERVER_HOST=host.docker.internal gradle acceptanceTest -Penv=ci
+      export HOST_IP=$(/sbin/ifconfig docker0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')      
+      SERVER_HOST=$HOST_IP gradle acceptanceTest -Penv=ci
