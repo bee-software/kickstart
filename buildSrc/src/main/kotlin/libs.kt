@@ -17,7 +17,7 @@ object libs {
 
     val juniversalchardet = "com.googlecode.juniversalchardet:juniversalchardet:1.0.3"
 
-    val kabinet = "com.vtence.kabinet:kabinet:0.2.4"
+    val kabinet = "com.vtence.kabinet:kabinet:0.3.5"
 
     val konfig = "com.natpryce:konfig:1.6.10.0"
 

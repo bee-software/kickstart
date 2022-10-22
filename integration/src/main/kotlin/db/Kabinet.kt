@@ -2,32 +2,33 @@ package kickstart.db
 
 
 import com.vtence.kabinet.Expression
+import com.vtence.kabinet.Field
 import com.vtence.kabinet.SqlBuilder
 import com.vtence.kabinet.append
 
 
-class IsNull(private val expression: Expression) : Expression {
+interface BooleanOp : Expression<Boolean>
+
+class IsNull(private val expression: Expression<*>) : BooleanOp {
     override fun build(statement: SqlBuilder) = statement {
-        +expression
-        +" IS NULL"
+        append(expression, " IS NULL")
     }
 }
 
-val Expression.isNull: Expression get() = IsNull(this)
+val Expression<*>.isNull: BooleanOp get() = IsNull(this)
 
 
-abstract class Comparison(val left: Expression, val right: Expression, val symbol: String) : Expression {
+abstract class Comparison(val symbol: String, protected val left: Expression<*>, protected val right: Expression<*>) : BooleanOp {
     override fun build(statement: SqlBuilder) = statement {
         append(left, " $symbol ", right)
     }
 }
 
+class Eq(left: Expression<*>, right: Expression<*>) : Comparison("=", left, right), BooleanOp
 
-class Eq(left: Expression, right: Expression) : Comparison(left, right, "="), Expression
+infix fun <T> Expression<T>.eq(value: Expression<T>): BooleanOp = Eq(this, value)
 
-infix fun Expression.eq(value: Expression): Expression = Eq(this, value)
-
-infix fun Expression.eq(value: Any?) = when (value) {
+infix fun <T> Field<T>.eq(value: T): BooleanOp = when (value) {
     null -> isNull
-    else -> eq(value.asArgument())
+    else -> eq(value.asParameter())
 }

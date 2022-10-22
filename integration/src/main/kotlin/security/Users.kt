@@ -17,13 +17,13 @@ fun Users.hydrate(rs: ResultRow): User {
     return User(Username(rs[username]), PasswordHash.from(rs[passwordHash]))
 }
 
-fun Users.dehydrate(st: Dataset, user: User) {
+val ResultRow.user: User get() = Users.hydrate(this)
+
+
+fun Users.dehydrate(st: DataSet, user: User) {
     st[username] = user.username.value
     st[passwordHash] = user.passwordHash
 }
-
-
-val ResultRow.user: User get() = Users.hydrate(this)
 
 val User.record: Dehydrator<Users> get() = {
     dehydrate(it, this@record)
