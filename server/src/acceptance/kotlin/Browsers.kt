@@ -46,6 +46,7 @@ object Browser {
         setHeadless(options[selenium.chrome.headless])
     })
 
-    fun remote(options: Configuration): WebDriver =
-        RemoteWebDriver(options[selenium.remote.location], DesiredCapabilities())
+    fun remote(options: Configuration): WebDriver {
+        return RemoteWebDriver(options[selenium.remote.location], ChromeOptions(), true)
+    }
 }
