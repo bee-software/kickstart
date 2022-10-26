@@ -6,11 +6,10 @@ import kickstart.storytelling.browsing.browsingAs
 
 class Click(private val target: Target): Action {
 
-    override fun invoke(actor: Actor) = browsingAs(actor).find(target).click()
-
-    companion object {
-        fun on(target: Target) = Click(target)
+    override fun invoke(actor: Actor) {
+        browsingAs(actor).find(target).click()
     }
 }
 
-fun clickOn(target: Target) = Click.on(target)
+
+fun clickOn(target: Target) = Click(target)

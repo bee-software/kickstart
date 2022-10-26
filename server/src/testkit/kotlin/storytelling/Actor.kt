@@ -17,33 +17,56 @@ class Actor(private val abilities: MutableList<Ability>) {
         abilities += doThings
     }
 
+    inline fun <reified T : Ability> ability(): T? = abilityTo(T::class)
+
     fun <T : Ability> abilityTo(doThings: KClass<T>): T? {
         return abilities.firstOrNull { it::class == doThings }?.let { doThings.cast(it) }
     }
 
-    fun leave() = abilities.forEach { it.drop() }
+    fun leave() {
+        abilities.forEach { it.drop() }
+    }
 
-    fun wasAbleTo(vararg thingsDone: Performable) = does(*thingsDone)
+    fun wasAbleTo(vararg thingsDone: Performable) {
+        does(*thingsDone)
+    }
 
-    fun has(vararg thingsDone: Performable) = does(*thingsDone)
+    fun has(vararg thingsDone: Performable) {
+        does(*thingsDone)
+    }
 
-    fun attemptsTo(vararg thingsToDo: Performable) = does(*thingsToDo)
+    fun attemptsTo(vararg thingsToDo: Performable) {
+        does(*thingsToDo)
+    }
 
-    fun does(vararg thingsToDo: Performable) = thingsToDo.forEach { apply(it) }
+    fun does(vararg thingsToDo: Performable) {
+        thingsToDo.forEach { apply(it) }
+    }
 
-    fun seesThat(vararg thingsToCheck: Verifiable) = checks(*thingsToCheck)
+    fun seesThat(vararg thingsToCheck: Verifiable) {
+        checks(*thingsToCheck)
+    }
 
-    fun checks(vararg thingsToCheck: Verifiable) = thingsToCheck.forEach { apply(it) }
+    fun checks(vararg thingsToCheck: Verifiable) {
+        thingsToCheck.forEach { apply(it) }
+    }
 
-    fun <ABOUT : Any> wantsToKnow(answer: Answerable<ABOUT>) = answer(this)
+    fun <ABOUT : Any> wantsToKnow(answer: Answerable<ABOUT>): ABOUT {
+        return answer(this)
+    }
 
-    fun <ABOUT : Any> remembers(what: Info<ABOUT>, answer: Answerable<ABOUT>) = remembers(what, wantsToKnow(answer))
+    fun <ABOUT : Any> remembers(what: Info<ABOUT>, answer: Answerable<ABOUT>) {
+        remembers(what, wantsToKnow(answer))
+    }
 
-    fun <ABOUT : Any> remembers(what: Info<ABOUT>, content: ABOUT) = memory.set(what, content)
+    fun <ABOUT : Any> remembers(what: Info<ABOUT>, content: ABOUT) {
+        memory[what] = content
+    }
 
-    fun <ABOUT : Any> recalls(what: Info<ABOUT>): ABOUT? = memory[what]?.let { what.cast(it) }
-
-    companion object {
-        fun ableTo(vararg abilities: Ability) = Actor(abilities.toMutableList())
+    fun <ABOUT : Any> recalls(what: Info<ABOUT>): ABOUT? {
+        return memory[what]?.let { what.cast(it) }
     }
 }
+
+
+fun actorAbleTo(vararg abilities: Ability) = Actor(abilities.toMutableList())

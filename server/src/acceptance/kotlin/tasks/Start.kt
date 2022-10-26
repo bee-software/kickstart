@@ -10,10 +10,6 @@ class Start(private val uri: URI) : Task {
     override fun invoke(actor: Actor) {
         actor.does(openBrowserAt(uri))
     }
-
-    companion object {
-        fun using(application: Server) = Start(application.uri)
-    }
 }
 
-fun startUsing(application: Server) = Start.using(application)
+fun startUsing(application: Server) = Start(application.uri)

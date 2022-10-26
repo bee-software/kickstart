@@ -15,11 +15,9 @@ class OpenBrowser(private val start: URL) : Action {
 
     companion object {
         val startUrl = Info.create<URL>()
-
-        fun at(url: URL) = OpenBrowser(url)
     }
 }
 
 fun openBrowserAt(uri: URI) = openBrowserAt(uri.toURL())
 
-fun openBrowserAt(url: URL) = OpenBrowser.at(url)
+fun openBrowserAt(url: URL) = OpenBrowser(url)

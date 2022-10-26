@@ -7,9 +7,15 @@ import java.net.http.HttpResponse
 import java.net.http.HttpResponse.BodyHandler
 import java.net.http.HttpResponse.BodyHandlers
 
-fun HttpRequest.Builder.GET(uri: URI): HttpRequest.Builder = this.uri(uri).GET()
 
-fun HttpClient.send(request: HttpRequest.Builder) = this.send(request, BodyHandlers.ofString())
+fun HttpRequest.Builder.GET(uri: URI): HttpRequest.Builder = uri(uri).GET()
 
-fun <T> HttpClient.send(request: HttpRequest.Builder, handler: BodyHandler<T>): HttpResponse<T> =
-    this.send(request.build(), handler)
+
+fun HttpClient.send(request: HttpRequest.Builder): HttpResponse<String> {
+    return send(request, BodyHandlers.ofString())
+}
+
+
+fun <T> HttpClient.send(request: HttpRequest.Builder, handler: BodyHandler<T>): HttpResponse<T> {
+    return send(request.build(), handler)
+}

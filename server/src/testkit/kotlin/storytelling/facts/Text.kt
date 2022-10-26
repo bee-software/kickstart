@@ -10,10 +10,6 @@ class Text(private val target: Target) {
     fun `is`(text: Matcher<in String>): Fact = { actor ->
         browsingAs(actor).check(target).hasText(text)
     }
-
-    companion object {
-        fun of(target: Target) = Text(target)
-    }
 }
 
-fun textOf(target: Target) = Text.of(target)
+fun textOf(target: Target) = Text(target)

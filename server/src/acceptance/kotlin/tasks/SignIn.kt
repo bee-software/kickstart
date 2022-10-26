@@ -6,7 +6,6 @@ import kickstart.pages.HomePage.ProfileMenu
 import kickstart.pages.LoginPage
 import kickstart.storytelling.Actor
 import kickstart.storytelling.Task
-import kickstart.storytelling.browsing.BrowseTheWeb
 import kickstart.storytelling.on
 
 class SignIn(private val identity: Identity) : Task {
@@ -28,10 +27,6 @@ class SignIn(private val identity: Identity) : Task {
             actor.seesThat(ProfileMenu.showsCurrentlySignedInAs(identity.email))
         }
     }
-
-    companion object {
-        fun `as`(identity: Identity) = SignIn(identity)
-    }
 }
 
-fun signInAs(identity: Identity) = SignIn.`as`(identity)
+fun signInAs(identity: Identity) = SignIn(identity)

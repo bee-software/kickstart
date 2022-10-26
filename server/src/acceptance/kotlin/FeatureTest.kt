@@ -2,7 +2,9 @@ package kickstart
 
 import kickstart.models.Identities
 import kickstart.storytelling.Actor
+import kickstart.storytelling.actorAbleTo
 import kickstart.storytelling.browsing.BrowseTheWeb
+import kickstart.storytelling.browsing.browseTheWebUsing
 import kickstart.tasks.signInAs
 import kickstart.tasks.signOut
 import kickstart.tasks.startUsing
@@ -14,7 +16,7 @@ import kotlin.test.Test
 class FeatureTest {
 
     val app = App.start()
-    val actor = Actor.ableTo(BrowseTheWeb.using(hisBrowser))
+    val actor = actorAbleTo(browseTheWebUsing(hisBrowser))
 
     @BeforeTest
     fun start() {
