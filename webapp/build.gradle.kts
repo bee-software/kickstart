@@ -9,7 +9,7 @@ dependencies {
     implementation(libs.jmustache)
     implementation(libs.kabinet)
     implementation(libs.konfig)
-    implementation(libs.molecule, dependencyConfiguration = { isChanging = true })
+    implementation(libs.molecule)
 
     testkitImplementation(project(path = ":domain", configuration = "testkit"))
     testkitImplementation(libs.skrapeit)
