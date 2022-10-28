@@ -101,6 +101,7 @@ dependencies {
 
     testkitImplementation(libs.hamkrest)
     testkitImplementation(libs.junit.api)
+    testkitImplementation(libs.konstruct)
     testkitImplementation(libs.faker)
     testkitImplementation(libs.minutest)
     testkit(sourceSets["testkit"].output)

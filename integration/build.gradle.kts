@@ -11,7 +11,6 @@ dependencies {
     runtimeOnly(libs.postgres)
 
     testkitImplementation(project(path = ":domain", configuration = "testkit"))
-    testkitImplementation(libs.hamkrest)
 }
 
 tasks.jar {

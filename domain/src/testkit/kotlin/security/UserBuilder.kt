@@ -1,14 +1,16 @@
 package kickstart.security
 
-import kickstart.Builder
+import com.vtence.konstruct.Factory
+import com.vtence.konstruct.property
 
-class UserBuilder(
-    var username: String = "john.doe",
-    var password: String = "secret"
-): Builder<User> {
-    override fun build(): User {
-        return User(username, password)
+object UserMaker {
+    val username = property<User, String>()
+    val password = property<User, String>()
+
+    val user = Factory {
+        User(
+            username = it.valueOf(username) ?: "john.doe",
+            password = it.valueOf(password) ?: "secret"
+        )
     }
 }
-
-fun user(build: UserBuilder.() -> Unit) = UserBuilder().apply(build)

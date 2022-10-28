@@ -21,6 +21,8 @@ object libs {
 
     val konfig = "com.natpryce:konfig:1.6.10.0"
 
+    val konstruct = "com.vtence.konstruct:konstruct:0.6.0"
+
     val mario = "com.vtence.mario:mario:0.3.3"
 
     val minutest = "dev.minutest:minutest:2.0.0-rc4"

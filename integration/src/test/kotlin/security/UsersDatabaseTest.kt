@@ -2,7 +2,14 @@ package kickstart.security
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
+import com.vtence.konstruct.Provider
+import com.vtence.konstruct.a
+import com.vtence.konstruct.make
+import com.vtence.konstruct.with
 import kickstart.db.AbstractDatabaseTest
+import kickstart.security.UserMaker.password
+import kickstart.security.UserMaker.user
+import kickstart.security.UserMaker.username
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -21,9 +28,9 @@ class UsersDatabaseTest : AbstractDatabaseTest() {
 
     @Test
     fun `round trips users`() {
-        val samples = listOf(
-            user { username = "dany@persuaders.com"; password = "american" },
-            user { username = "brett@persuaders.com"; password = "british" }
+        val samples = make(
+            a(user, with(username, "dany@persuaders.com"), with(password,"american")),
+            a(user, with(username, "brett@persuaders.com"), with(password,"british")),
         )
 
         samples.forEach {  assertCanBePersisted(it) }
@@ -32,9 +39,9 @@ class UsersDatabaseTest : AbstractDatabaseTest() {
     @Test
     fun `finds user by username`() {
         persist(
-            user { username = "dany@persuaders.com" },
-            user { username = "brett@persuaders.com" },
-            user { username = "remington.steel@gmail.com"}
+            a(user, with(username, "dany@persuaders.com")),
+            a(user, with(username, "brett@persuaders.com")),
+            a(user, with(username, "remington.steel@gmail.com")),
         )
         val match = db.findBy(Username("brett@persuaders.com"))
 
@@ -43,12 +50,12 @@ class UsersDatabaseTest : AbstractDatabaseTest() {
 
     @Test
     fun `refuses to add account if username is already taken`() {
-        persist(user { username = "remington.steel@gmail.com" })
+        persist(a(user, with(username, "remington.steel@gmail.com")),)
 
-        assertThrows<SQLException> { db.add(user { username = "remington.steel@gmail.com" }.build()) }
+        assertThrows<SQLException> { persist(a(user, with(username, "remington.steel@gmail.com"))) }
     }
 
-    private fun assertCanBePersisted(user: UserBuilder) {
+    private fun assertCanBePersisted(user: User) {
         assertReloadsWithSameState(persisted(user))
     }
 
@@ -57,13 +64,13 @@ class UsersDatabaseTest : AbstractDatabaseTest() {
         assertThat("persisted entity", persisted, present(hasSameStateAs(original)))
     }
 
-    private fun persist(vararg users: UserBuilder) {
-        users.forEach { persisted(it) }
+    private fun persist(vararg users: Provider<User>) {
+        users.forEach { persisted(it()) }
     }
 
-    private fun persisted(user: UserBuilder): User {
+    private fun persisted(user: User): User {
         return transaction {
-            user.build().also { db.add(it) }
+            db.add(user)
         }
     }
 }

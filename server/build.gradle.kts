@@ -17,7 +17,6 @@ dependencies {
 
     runtimeOnly(libs.simple)
 
-    testkitImplementation(libs.hamkrest)
     testkitImplementation(libs.mario)
     testkitImplementation(libs.selenium.api)
     testkitImplementation(libs.selenium.chromedriver)

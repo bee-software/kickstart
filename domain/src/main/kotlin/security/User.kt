@@ -7,8 +7,8 @@ value class Username(val value: String): Serializable {
     override fun toString() = value.lowercase()
 }
 
-class User(val username: Username, private val password: PasswordHash) {
 
+data class User(val username: Username, private val password: PasswordHash) {
     val passwordHash: String by password::value
 
     fun checkPassword(secret: String) = password.validate(secret)

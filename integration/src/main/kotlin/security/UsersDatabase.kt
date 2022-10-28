@@ -7,8 +7,9 @@ import kickstart.db.eq
 
 class UsersDatabase(private val db: StatementExecutor) : UserBase {
 
-    fun add(user: User) {
+    fun add(user: User): User {
         Users.insert(user.record).execute(db)
+        return user
     }
 
     override fun findBy(username: Username): User? {
