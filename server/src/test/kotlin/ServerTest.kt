@@ -10,19 +10,18 @@ import com.vtence.molecule.http.HeaderNames
 import com.vtence.molecule.testing.http.HttpResponseAssert.assertThat
 import dev.minutest.*
 import dev.minutest.junit.JUnit5Minutests
-import org.hamcrest.Matchers.containsString
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.net.http.HttpResponse.BodyHandlers
 
 
-class ServerFixture(private val config: Configuration) {
+data class ServerFixture(val config: Configuration) {
     val server = Server(config[Settings.server.host], config[Settings.server.port])
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder(server.uri)
 
-    val console = ConsoleOutput.capture()
+    val console = ConsoleOutput.standardOut()
 
     fun start() {
         server.start(config)
@@ -30,6 +29,13 @@ class ServerFixture(private val config: Configuration) {
 
     fun stop() {
         server.stop()
+    }
+
+    fun captureOutput() {
+        console.capture()
+    }
+
+    fun releaseOutput() {
         console.release()
     }
 
@@ -43,89 +49,104 @@ class ServerFixture(private val config: Configuration) {
 }
 
 class ServerTest : JUnit5Minutests {
-    fun `configuration tests`() = rootContext<ServerFixture> {
-        given {
-            ServerFixture(ConfigurationMap("server.quiet" to "false") overriding EnvironmentFile.load("test"))
+    @Tests
+    fun tests() = rootContext<ServerFixture> {
+        context("properly configured") {
+            given { ServerFixture(EnvironmentFile.load("test")) }
+
+            beforeEach {
+                start()
+            }
+
+            afterEach {
+                stop()
+            }
+
+            test("is alive") {
+                val response = get("/en/status")
+
+                assertThat(response).isOK.hasBody("All green.")
+            }
+
+            test("sets server header") {
+                val response = get("/")
+                assertThat(response).hasHeader("Server")
+            }
+
+            test("sets date header") {
+                val response = get("/")
+
+                assertThat(response).hasHeader("Date")
+            }
+
+            test("renders static assets") {
+                val response = get("/favicon.ico", BodyHandlers.ofByteArray())
+
+                assertThat(response).isOK
+                    .hasContentType("image/x-icon")
+                    .isNotChunked
+                    .hasHeader("Content-Length", "15086")
+            }
+
+            test("renders dynamic content as html utf-8 encoded") {
+                val response = get("/en")
+
+                assertThat(response).isOK
+                    .hasContentType("text/html; charset=utf-8")
+            }
+
+            test("redirects to localized urls") {
+                val response = get("/")
+
+                assertThat(response).hasHeader(HeaderNames.LOCATION, "/en")
+            }
         }
 
-        beforeEach {
-            start()
-        }
+        context("in verbose mode") {
+            given {
+                ServerFixture(ConfigurationMap("server.quiet" to "false") overriding EnvironmentFile.load("test"))
+            }
 
-        afterEach {
-            stop()
-        }
+            beforeEach {
+                captureOutput()
+                start()
+            }
 
-        test("is alive") {
-            val response = get("/en/status")
+            afterEach {
+                stop()
+                releaseOutput()
+            }
 
-            assertThat(response).isOK.hasBody("All green.")
-        }
+            test("logs all accesses") {
+                val response = get("/en/status")
 
-        test("sets server header") {
-            val response = get("/")
-            assertThat(response).hasHeader("Server")
-        }
+                assertThat(response).isOK
 
-        test("sets date header") {
-            val response = get("/")
-
-            assertThat(response).hasHeader("Date")
-        }
-
-        test("logs all accesses") {
-            val response = get("/en/status")
-
-            assertThat(response).isOK
-
-            assertThat(
-                "log output", console.lines, anyElement(
-                    containsSubstring("\"GET /en/status HTTP/1.1\" 200")
+                assertThat(
+                    "log output", console.lines, anyElement(
+                        containsSubstring("\"GET /en/status HTTP/1.1\" 200")
+                    )
                 )
-            )
+            }
         }
 
-        test("renders static assets") {
-            val response = get("/favicon.ico", BodyHandlers.ofByteArray())
+        context("misconfigured") {
+            given {
+                ServerFixture(ConfigurationMap("db.password" to "wrong secret") overriding EnvironmentFile.load("test"))
+            }
 
-            assertThat(response).isOK
-                .hasContentType("image/x-icon")
-                .isNotChunked
-                .hasHeader("Content-Length", "15086")
-        }
+            beforeEach {
+                start()
+            }
 
-        test("renders dynamic content as html utf-8 encoded") {
-            val response = get("/en")
+            afterEach {
+                stop()
+            }
 
-            assertThat(response).isOK
-                .hasContentType("text/html; charset=utf-8")
-        }
-
-        test("redirects to localized urls") {
-            val response = get("/")
-
-            assertThat(response).hasHeader(HeaderNames.LOCATION, "/en")
-        }
-    }
-
-    fun `robustness tests`() = rootContext<ServerFixture> {
-        given {
-            ServerFixture(
-                ConfigurationMap("db.password" to "wrong secret") overriding EnvironmentFile.load("test")
-            )
-        }
-
-        beforeEach {
-            start()
-        }
-
-        afterEach {
-            stop()
-        }
-
-        test("renders 500 in case of internal error") {
-            val response = get("/")
-            assertThat(response).hasStatusCode(500)
+            test("renders 500 to report internal error") {
+                val response = get("/")
+                assertThat(response).hasStatusCode(500)
+            }
         }
     }
 }

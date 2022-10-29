@@ -10,7 +10,7 @@ class ConsoleOutput(private val stdout: PrintStream) {
     val lines: Collection<String>
         get() = output.toString().split("\n")
 
-    init {
+    fun capture() {
         System.setOut(PrintStream(output))
     }
 
@@ -19,7 +19,7 @@ class ConsoleOutput(private val stdout: PrintStream) {
     }
 
     companion object {
-        fun capture(): ConsoleOutput {
+        fun standardOut(): ConsoleOutput {
             return ConsoleOutput(System.out)
         }
     }
