@@ -20,7 +20,8 @@ class I18n(val supportedLocales: Set<Locale>, location: String) {
                     val view = views.named<Any>(name)
                     if (content is I18ned) {
                         val translations = messages.loadBundle("views", name, locale)
-                        view.render(content.localize(Translations(locale, alternativeTo(locale), translations)))
+                        content.localize(Translations(locale, alternativeTo(locale), translations))
+                        view.render(content)
                     } else {
                         view.render(content)
                     }

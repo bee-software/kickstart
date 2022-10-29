@@ -18,7 +18,6 @@ interface Views {
 }
 
 class Pages(folder: Path): Views  {
-
     private val templates: Templates = Templates(JMustacheRenderer.fromDir(folder.toFile()).nullValue(""))
 
     override fun <T : Any> named(name: String): View<T> {

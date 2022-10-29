@@ -1,9 +1,9 @@
 package kickstart.security
 
-import com.vtence.kabinet.*
-import kickstart.security.PasswordHash
-import kickstart.security.User
-import kickstart.security.Username
+import com.vtence.kabinet.DataSet
+import com.vtence.kabinet.Dehydrator
+import com.vtence.kabinet.ResultRow
+import com.vtence.kabinet.Table
 
 
 object Users: Table("users") {
@@ -13,14 +13,14 @@ object Users: Table("users") {
 }
 
 
-fun Users.hydrate(rs: ResultRow): User {
+private fun Users.hydrate(rs: ResultRow): User {
     return User(Username(rs[username]), PasswordHash.from(rs[passwordHash]))
 }
 
 val ResultRow.user: User get() = Users.hydrate(this)
 
 
-fun Users.dehydrate(st: DataSet, user: User) {
+private fun Users.dehydrate(st: DataSet, user: User) {
     st[username] = user.username.value
     st[passwordHash] = user.passwordHash
 }

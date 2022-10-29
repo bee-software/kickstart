@@ -4,7 +4,7 @@ import java.util.*
 
 
 interface I18ned {
-    fun localize(messages: LocalizedMessages): Any
+    fun localize(messages: LocalizedMessages)
 }
 
 

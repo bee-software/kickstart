@@ -1,6 +1,8 @@
 package kickstart.security
 
-import kickstart.i18n.*
+import kickstart.L10n
+import kickstart.L10ned
+import kickstart.i18n.I18ned
 import kickstart.validation.*
 import kickstart.validation.ValidationResult.Failure
 import kickstart.validation.ValidationResult.Success
@@ -8,14 +10,10 @@ import kickstart.validation.ValidationResult.Success
 data class Login(
     val email: String? = null,
     private val violations: List<Violation> = listOf(),
-    private val messages: LocalizedMessages = noMessages
-) : I18ned {
-    val lang by messages::language
-    val t by messages::interpolation
+    private val l10n: L10n = L10n()
+) : L10ned by l10n, I18ned by l10n {
 
-    override fun localize(messages: LocalizedMessages) = copy(messages = messages)
-
-    fun errors() = ErrorMessages(prefix = "errors", violations = violations, lookup = messages.lookup)
+    fun errors() = ErrorMessages(prefix = "errors", violations = violations, lookup = l10n::lookup)
 
     operator fun plus(result: ValidationResult<*>) = when (result) {
         is Success -> this

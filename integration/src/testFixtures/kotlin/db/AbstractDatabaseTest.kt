@@ -41,7 +41,9 @@ abstract class AbstractDatabaseTest {
         cleaner.clean(*tables)
     }
 
-    fun <T> transaction(work: UnitOfWork<T>): T = transactor(work)
+    fun <T> transaction(work: UnitOfWork<T>): T {
+        return transactor(work)
+    }
 
     companion object {
         @JvmStatic
