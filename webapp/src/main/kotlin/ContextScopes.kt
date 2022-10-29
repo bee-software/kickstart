@@ -5,6 +5,8 @@ import com.vtence.kabinet.StatementExecutor
 import com.vtence.molecule.FailureReporter
 import com.vtence.molecule.Request
 import kickstart.db.DataSources
+import kickstart.db.DatabaseConfiguration
+import kickstart.db.migrateDatabase
 import kickstart.i18n.i18n
 import kickstart.i18n.locale
 import kickstart.security.SecurityModule
@@ -25,7 +27,9 @@ class ApplicationContext private constructor(config: Configuration) {
     val sessionKey: String = "super secret key"
     val logger: Logger = if (config[Settings.server.quiet]) Loggers.off() else Loggers.toConsole(Level.ALL)
     val errorReporter: FailureReporter = ErrorLogger(logger)
-    val dataSource: DataSource = DataSources.configure(config)
+    val dataSource: DataSource = DataSources.configure(config) {
+        if (config[DatabaseConfiguration.db.migrate]) migrateDatabase(it)
+    }
 
     private val pages = pages(root)
     private val i18n = i18n(defaultLocale, Locale.CANADA_FRENCH, Locale.CANADA)

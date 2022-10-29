@@ -26,28 +26,23 @@ object DatabaseConfiguration {
 }
 
 object DataSources {
-    fun configure(config: Configuration): DataSource {
+    fun configure(config: Configuration, prepare: (DataSource) -> Unit = {}): DataSource {
         return AutoSelectDataSource(
             "jdbc:${config[driver]}://${config[host]}:${config[port]}/${config[name]}",
             config[user],
             config[password],
             autoCommit = false
-        ).also {
-            if (config[migrate]) DatabaseMigrator(it).migrate()
-        }
+        ).also(prepare)
     }
 }
 
-class DatabaseMigrator(dataSource: DataSource) {
-    private val flyway = Flyway.configure()
-        .sqlMigrationPrefix("")
-        .sqlMigrationSeparator("_")
-        .dataSource(dataSource)
-        .placeholderReplacement(false)
-        .table("schema_history")
-        .load()
+private val flyway = Flyway.configure()
+    .sqlMigrationPrefix("")
+    .sqlMigrationSeparator("_")
+    .placeholderReplacement(false)
+    .table("schema_history")
 
-    fun migrate() {
-        flyway.migrate()
-    }
+
+fun migrateDatabase(dataSource: DataSource) {
+    flyway.dataSource(dataSource).load().migrate()
 }
