@@ -1,7 +1,6 @@
-package kickstart
+package kickstart.i18n
 
 import com.samskivert.mustache.Mustache
-import kickstart.i18n.*
 
 data class L10n(
     private var messages: LocalizedMessages = noMessages

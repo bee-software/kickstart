@@ -1,7 +1,7 @@
 package kickstart.security
 
-import kickstart.L10n
-import kickstart.L10ned
+import kickstart.i18n.L10n
+import kickstart.i18n.L10ned
 import kickstart.i18n.I18ned
 import kickstart.validation.*
 import kickstart.validation.ValidationResult.Failure

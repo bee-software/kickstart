@@ -1,6 +1,8 @@
 package kickstart
 
 import kickstart.i18n.I18ned
+import kickstart.i18n.L10n
+import kickstart.i18n.L10ned
 import kickstart.security.Username
 import kickstart.security.md5
 
