@@ -8,7 +8,6 @@ import java.nio.file.Path
 import java.util.*
 
 class ViewRenderer<in T : Any>(from: Path, private val locale: Locale) {
-
     val pages = pages(from)
     val i18n = i18n(Locale.getDefault(), locale)
 
@@ -17,6 +16,7 @@ class ViewRenderer<in T : Any>(from: Path, private val locale: Locale) {
         return htmlDocument(BodyContent.asText(response))
     }
 }
+
 
 typealias Expectations = Doc.() -> Unit
 

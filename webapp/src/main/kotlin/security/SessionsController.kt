@@ -24,9 +24,7 @@ class SessionsController(
 
         when (val result = form.validate()) {
             is Success -> {
-                val user = authenticator.authenticate(result.value)
-                    ?: return view.done(Login.invalid(form.email))
-
+                val user = authenticator.authenticate(result.value) ?: return view.done(Login.invalid(form.email))
                 val session = bindFreshSession(request)
                 session.username = user.username
             }
