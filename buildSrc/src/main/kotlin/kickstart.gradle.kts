@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+    id("java-test-fixtures")
 }
 
 val buildNumber by extra("0")
@@ -25,29 +26,9 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-sourceSets {
-    create("testkit") {
-        compileClasspath += sourceSets.main.get().output
-        runtimeClasspath += sourceSets.main.get().output
-    }
-}
-
-val testkit by configurations.creating {
-    isCanBeResolved = false
-    isCanBeConsumed = true
-}
-
-val testkitImplementation by configurations.getting { extendsFrom(configurations.implementation.get()) }
-configurations["testImplementation"].extendsFrom(testkitImplementation)
-
-sourceSets.test {
-    compileClasspath += sourceSets["testkit"].output
-    runtimeClasspath += sourceSets["testkit"].output
-}
-
 val acceptance by sourceSets.creating {
-    compileClasspath += sourceSets.main.get().output + sourceSets["testkit"].output
-    runtimeClasspath += sourceSets.main.get().output + sourceSets["testkit"].output
+    compileClasspath += sourceSets.main.get().output + sourceSets["testFixtures"].output
+    runtimeClasspath += sourceSets.main.get().output + sourceSets["testFixtures"].output
 }
 
 val acceptanceImplementation by configurations.getting {
@@ -79,7 +60,7 @@ val acceptanceTest = tasks.register<Test>("acceptanceTest") {
     testClassesDirs = acceptance.output.classesDirs
     classpath = configurations[acceptance.runtimeClasspathConfigurationName] +
             sourceSets.main.get().output +
-            sourceSets["testkit"].output +
+            sourceSets["testFixtures"].output +
             acceptance.output
 
     project.properties["env"]?.let { systemProperty("env.name", it) }
@@ -99,12 +80,11 @@ tasks.check {
 dependencies {
     implementation(kotlin("reflect"))
 
-    testkitImplementation(libs.hamkrest)
-    testkitImplementation(libs.junit.api)
-    testkitImplementation(libs.konstruct)
-    testkitImplementation(libs.faker)
-    testkitImplementation(libs.minutest)
-    testkit(sourceSets["testkit"].output)
+    testFixturesApi(libs.hamkrest)
+    testFixturesApi(libs.junit.api)
+    testFixturesApi(libs.konstruct)
+    testFixturesApi(libs.minutest)
 
     testImplementation(kotlin("test"))
 }
+

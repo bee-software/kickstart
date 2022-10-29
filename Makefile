@@ -16,7 +16,7 @@ test:
 acceptance: ENV=test
 acceptance:
 	@echo "Running acceptance tests of version ${VERSION} in ${ENV} environment..."
-	@./gradlew acceptanceTest -Penv=${ENV}
+	@./gradlew server:acceptanceTest -Penv=${ENV}
 
 build: ENV=test
 build:

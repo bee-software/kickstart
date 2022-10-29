@@ -7,7 +7,7 @@ class HexEncoder(upperCase: Boolean = true) {
         .let { if (upperCase) it.uppercase(Locale.getDefault()) else it }
         .toCharArray()
 
-    fun toHex(bytes: ByteArray): String {
+    fun encodeToHex(bytes: ByteArray): String {
         val hex = CharArray(bytes.size * 2)
         for (i in bytes.indices) {
             val v = bytes[i].toInt() and 0xFF
@@ -20,13 +20,13 @@ class HexEncoder(upperCase: Boolean = true) {
 
 fun String.toHex(upperCase: Boolean = true) = encodeToByteArray().toHex(upperCase)
 
-fun ByteArray.toHex(upperCase: Boolean = true) = HexEncoder(upperCase).toHex(this)
+fun ByteArray.toHex(upperCase: Boolean = true) = HexEncoder(upperCase).encodeToHex(this)
 
 
 object HexDecoder {
-    fun fromHex(hex: String): ByteArray = fromHex(hex.toCharArray())
+    fun decodeFromHex(hex: String): ByteArray = decode(hex.toCharArray())
 
-    private fun fromHex(hex: CharArray): ByteArray {
+    private fun decode(hex: CharArray): ByteArray {
         val len = hex.size
         require(len and 0x01 == 0) { "odd number of characters" }
         val out = ByteArray(len shr 1)
@@ -42,4 +42,4 @@ object HexDecoder {
     private fun toDigit(c: Char): Int = Character.digit(c, 16)
 }
 
-fun String.fromHex() = HexDecoder.fromHex(this)
+fun String.fromHex() = HexDecoder.decodeFromHex(this)

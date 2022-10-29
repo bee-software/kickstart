@@ -1,3 +1,4 @@
+
 plugins {
     id("kickstart")
     application
@@ -9,6 +10,7 @@ application {
     mainClass.set("kickstart.CLI")
 }
 
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":webapp"))
@@ -17,9 +19,9 @@ dependencies {
 
     runtimeOnly(libs.simple)
 
-    testkitImplementation(libs.mario)
-    testkitImplementation(libs.selenium.api)
-    testkitImplementation(libs.selenium.chromedriver)
+    testFixturesApi(libs.mario)
+    testFixturesApi(libs.selenium.api)
+    testFixturesApi(libs.selenium.chromedriver)
 
     testRuntimeOnly(libs.hamcrest.library)
     testRuntimeOnly(libs.juniversalchardet)

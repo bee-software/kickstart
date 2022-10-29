@@ -11,10 +11,9 @@ dependencies {
     implementation(libs.konfig)
     implementation(libs.molecule)
 
-    testkitImplementation(project(path = ":domain", configuration = "testkit"))
-    testkitImplementation(libs.skrapeit)
-    testkitImplementation(libs.hamkrest)
-
+    testFixturesApi(libs.skrapeit)
+    testFixturesImplementation(libs.molecule)
+    testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.hamcrest.library)
 }
 

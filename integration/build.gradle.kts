@@ -10,7 +10,10 @@ dependencies {
     implementation(libs.konfig)
     runtimeOnly(libs.postgres)
 
-    testkitImplementation(project(path = ":domain", configuration = "testkit"))
+    testImplementation(testFixtures(project(":domain")))
+    testFixturesImplementation(project(":domain"))
+    testFixturesImplementation(libs.kabinet)
+    testFixturesImplementation(libs.konfig)
 }
 
 tasks.jar {

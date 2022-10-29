@@ -9,9 +9,7 @@ import kickstart.tasks.signInAs
 import kickstart.tasks.signOut
 import kickstart.tasks.startUsing
 import kickstart.tasks.stopUsing
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
+import kotlin.test.*
 
 class FeatureTest {
 
