@@ -7,7 +7,8 @@ import kickstart.i18n.i18n
 import java.nio.file.Path
 import java.util.*
 
-class ViewRenderer<in T : Any>(from: Path, private val locale: Locale) {
+
+private class ViewRenderer<in T : Any>(from: Path, private val locale: Locale) {
     val pages = pages(from)
     val i18n = i18n(Locale.getDefault(), locale)
 
@@ -20,13 +21,17 @@ class ViewRenderer<in T : Any>(from: Path, private val locale: Locale) {
 
 typealias Expectations = Doc.() -> Unit
 
-inline fun <reified T : Any> renderView(
-    template: String,
-    context: T,
-    locale: Locale = Locale.getDefault(),
-    expectations: Expectations = {}
-): Doc {
-    val renderer = ViewRenderer<T>(WebRoot.location, locale)
-    val doc = renderer.render(template, context)
-    return doc.apply(expectations)
+
+open class PageFixture<T : Any>(
+    private val templateName: String,
+    private val content: T,
+    protected val locale: Locale,
+) {
+    private val renderer = ViewRenderer<T>(WebRoot.location, locale)
+
+    fun render(relaxed: Boolean = false, expectations: Expectations): Doc {
+        val doc = renderer.render(templateName, content)
+        doc.relaxed = relaxed
+        return doc.apply(expectations)
+    }
 }

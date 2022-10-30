@@ -4,7 +4,6 @@ import com.natpryce.hamkrest.equalToIgnoringCase
 import dev.minutest.*
 import dev.minutest.junit.JUnit5Minutests
 import it.skrape.matchers.toBeNotPresent
-import it.skrape.selects.Doc
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.main
 import it.skrape.selects.html5.menu
@@ -12,17 +11,7 @@ import kickstart.security.Username
 import java.util.*
 
 
-class HomePageFixture(
-    private val content: Home = Home(),
-    private val locale: Locale = Locale.getDefault(),
-) {
-    fun render(relaxed: Boolean = true, expectations: Expectations): Doc {
-        return renderView("home", content, locale) {
-            this.relaxed = relaxed
-            expectations(this)
-        }
-    }
-}
+class HomePageFixture(content: Home = Home(), locale: Locale = Locale.getDefault()) : PageFixture<Home>("home", content, locale)
 
 
 fun ContextBuilder<HomePageFixture>.showsTopMenu() {
@@ -63,7 +52,7 @@ class HomePageTest : JUnit5Minutests {
             showsTopMenu()
 
             test("links to login") {
-                render {
+                render(relaxed = true) {
                     main {
                         menu {
                             findFirst("#login a") {
@@ -103,7 +92,7 @@ class HomePageTest : JUnit5Minutests {
 
 
             test("offers logout option") {
-                render {
+                render(relaxed = true) {
                     main {
                         menu {
                             findAll("#login a") { toBeNotPresent }
