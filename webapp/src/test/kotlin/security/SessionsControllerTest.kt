@@ -2,101 +2,111 @@ package kickstart.security
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import com.vtence.molecule.Request.get
-import com.vtence.molecule.Request.post
+import com.vtence.molecule.Request
 import com.vtence.molecule.http.HttpStatus
 import com.vtence.molecule.testing.ResponseAssert.assertThat
-import kickstart.TestView
-import kickstart.and
-import kickstart.set
-import org.junit.jupiter.api.BeforeEach
-import kotlin.test.Test
+import dev.minutest.*
+import dev.minutest.junit.JUnit5Minutests
+import kickstart.*
 
-class SessionsControllerTest {
+class SessionsControllerTest : JUnit5Minutests {
 
-    val view = TestView<Login>()
-    val authenticator: Authenticator = Authenticator { (email, password) ->
-        password.takeIf { it == "secret" }?.let { User(email, password) }
-    }
-    val sessions = SessionsController(authenticator, view)
+    class Fixture {
+        val view = TestView<Login>()
 
-    val request = get("/")
+        val authenticator: Authenticator = Authenticator { (email, password) ->
+            password.takeIf { it == "secret" }?.let { User(email, password) }
+        }
+        val sessions = SessionsController(authenticator, view)
 
-    @BeforeEach
-    fun bindSession() {
-        bindFreshSession(request)
-    }
+        val request = Request.get("/").also { bindFreshSession(it) }
 
-    @Test
-    fun `renders login page to open session`() {
-        val response = sessions.new(request)
-
-        assertThat(response)
-            .hasStatus(HttpStatus.OK)
-            .isDone and
-                view renderedWith Login.empty
+        fun fillForm(email: String, password: String) {
+            request["email"] = email
+            request["password"] = password
+        }
     }
 
-    @Test
-    fun `creates fresh session when login successful`() {
-        fillForm(email = "alice@gmail.com", password = "secret")
+    @Tests
+    fun tests() = rootContext<Fixture> {
+        given { Fixture() }
 
-        request.session.invalidate()
-        val response = sessions.create(request)
+        test("renders login page to open session") {
+            val response = sessions.new(request)
 
-        assertThat(response).isRedirectedTo("/").isDone
+            assertThat(response)
+                .hasStatus(HttpStatus.OK)
+                .isDone and
+                    view renderedWith Login.empty
+        }
 
-        val user = request.session.username
-        assertThat("signed in email", user, equalTo(Username("alice@gmail.com")))
-    }
+        test("destroys session and redirects to home page on logout") {
+            val response = sessions.delete(request)
 
-    @Test
-    fun `renders invalid credentials when authentication fails`() {
-        fillForm("chris", "wrong secret")
+            assertThat(response)
+                .isRedirectedTo("/")
+                .isDone
 
-        val response = sessions.create(request)
+            assertThat("session invalidated", request.session.invalid(), equalTo(true))
+        }
 
-        assertThat(response)
-            .hasStatus(HttpStatus.OK)
-            .isDone and
-                view renderedWith Login.invalid("chris")
-    }
+        context("when session already opened") {
+            beforeEach {
+                request.session.username = Username("John")
+            }
 
-    @Test
-    fun `renders form errors when form validation fails`() {
-        fillForm(email = "", password = "")
+            test("redirects to download page") {
+                val response = sessions.new(request)
 
-        val response = sessions.create(request)
+                assertThat(response).isRedirectedTo("/").isDone
+            }
+        }
 
-        assertThat(response).hasStatus(HttpStatus.OK)
-            .isDone and view renderedWith
-                Login("") +
-                errors.login.email.required("") +
-                errors.login.password.required("")
-    }
+        context("successful login") {
+            beforeEach {
+                fillForm(email = "alice@gmail.com", password = "secret")
+            }
 
-    @Test
-    fun `redirects to download page if session already opened`() {
-        request.session.username = Username("John")
+            test("creates fresh session") {
+                request.session.invalidate()
+                val response = sessions.create(request)
 
-        val response = sessions.new(request)
+                assertThat(response).isRedirectedTo("/").isDone
 
-        assertThat(response).isRedirectedTo("/").isDone
-    }
+                val user = request.session.username
+                assertThat("signed in email", user, equalTo(Username("alice@gmail.com")))
+            }
+        }
 
-    @Test
-    fun `destroys session and redirects to home page on logout`() {
-        val response = sessions.delete(request)
+        context("authentication failure") {
+            beforeEach {
+                fillForm("chris", "wrong secret")
+            }
 
-        assertThat(response)
-            .isRedirectedTo("/")
-            .isDone
+            test("renders invalid credentials") {
+                val response = sessions.create(request)
 
-        assertThat("session invalidated", request.session.invalid(), equalTo(true))
-    }
+                assertThat(response)
+                    .hasStatus(HttpStatus.OK)
+                    .isDone and
+                        view renderedWith Login.invalid("chris")
+            }
+        }
 
-    private fun fillForm(email: String, password: String) {
-        request["email"] = email
-        request["password"] = password
+        context("failed validation") {
+            beforeEach {
+                fillForm(email = "", password = "")
+            }
+
+            test("renders form errors") {
+                val response = sessions.create(request)
+
+                assertThat(response).hasStatus(HttpStatus.OK)
+                    .isDone and view renderedWith
+                        Login("") +
+                        errors.login.email.required("") +
+                        errors.login.password.required("")
+            }
+        }
     }
 }
