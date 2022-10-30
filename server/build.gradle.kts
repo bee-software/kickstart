@@ -19,9 +19,10 @@ dependencies {
 
     runtimeOnly(libs.simple)
 
-    testFixturesApi(libs.mario)
     testFixturesApi(libs.selenium.api)
-    testFixturesApi(libs.selenium.chromedriver)
+    testFixturesImplementation(libs.konfig)
+    testFixturesImplementation(libs.mario)
+    testFixturesImplementation(libs.selenium.chromedriver)
 
     testRuntimeOnly(libs.hamcrest.library)
     testRuntimeOnly(libs.juniversalchardet)
