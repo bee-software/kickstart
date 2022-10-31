@@ -16,7 +16,7 @@ class HomeControllerTest : JUnit5Minutests {
         val home = HomeController(view)
 
         val request = Request.get("/")
-        val session = bindFreshSession(request)
+        val session = request.bindFreshSession()
     }
 
     @Tests

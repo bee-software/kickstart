@@ -19,7 +19,7 @@ class SessionsControllerTest : JUnit5Minutests {
         }
         val sessions = SessionsController(authenticator, view)
 
-        val request = Request.get("/").also { bindFreshSession(it) }
+        val request = Request.get("/").also { it.bindFreshSession() }
 
         fun fillForm(email: String, password: String) {
             request["email"] = email

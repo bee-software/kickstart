@@ -13,8 +13,8 @@ operator fun Session.set(key: Any, value: Serializable?) {
 }
 
 
-fun bindFreshSession(request: Request): Session {
-    return Session().also { it.bind(request) }
+fun Request.bindFreshSession(): Session {
+    return Session().also { it.bind(this) }
 }
 
 
