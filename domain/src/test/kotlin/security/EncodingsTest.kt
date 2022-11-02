@@ -2,12 +2,14 @@ package kickstart.security
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import dev.minutest.Tests
 import dev.minutest.junit.JUnit5Minutests
 import dev.minutest.rootContext
 import dev.minutest.test
 import kotlin.test.Test
 
 class HexTest : JUnit5Minutests {
+    @Tests
     fun `encoding and decoding tests`() = rootContext {
         test("encoding to hex") {
             assertThat(

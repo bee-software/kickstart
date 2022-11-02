@@ -3,28 +3,40 @@ package kickstart.i18n
 import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import dev.minutest.Tests
+import dev.minutest.given
+import dev.minutest.junit.JUnit5Minutests
+import dev.minutest.rootContext
+import dev.minutest.test
 import kotlin.test.Test
 
-class CompositeMessagesTest {
+class CompositeMessagesTest : JUnit5Minutests {
+    @Tests
+    fun tests() = rootContext<CompositeMessages> {
+        context("when empty") {
+            given { compose() }
 
-    @Test
-    fun `starts as empty`() {
-        val composite = compose()
+            test("can't interpolate anything") {
+                val composite = compose()
 
-        assertThat("any message", composite.interpolate("message"), absent())
-    }
+                assertThat("any message", composite.interpolate("message"), absent())
+            }
+        }
 
-    @Test
-    fun `looks up translation in all composed messages`() {
-        val composite = noMessages + Messages { _, _ -> "translation" }
+        context("when composed") {
+            given { noMessages + Messages { _, _ -> "translation" } }
 
-        assertThat("translated message", composite.interpolate("message"), equalTo("translation"))
-    }
+            test("look up translation in all messages") {
+                assertThat("translated message", interpolate("message"), equalTo("translation"))
+            }
+        }
 
-    @Test
-    fun `looks ups translations in order of addition`() {
-        val composite = Messages { _, _ -> "original" } + Messages { _, _ -> "override" }
+        context("when overridden") {
+            given { Messages { _, _ -> "original" } + Messages { _, _ -> "override" } }
 
-        assertThat("original translation", composite.interpolate("message"), equalTo("original"))
+            test("looks ups translations in order of addition") {
+                assertThat("original translation", interpolate("message"), equalTo("original"))
+            }
+        }
     }
 }

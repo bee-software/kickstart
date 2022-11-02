@@ -4,11 +4,13 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasElement
 import com.natpryce.hamkrest.hasSize
+import dev.minutest.Tests
 import dev.minutest.junit.JUnit5Minutests
 import dev.minutest.rootContext
 import dev.minutest.test
 
 class PasswordHashTest : JUnit5Minutests {
+    @Tests
     fun salting() = rootContext {
         test("generates a 24 bytes salt") {
             val hash = PasswordHash.create("password")
@@ -26,6 +28,7 @@ class PasswordHashTest : JUnit5Minutests {
             }
         }
 
+        @Tests
         fun hashing() = rootContext {
             test("creates hash from clear text password") {
                 val hash = PasswordHash.create("clear password")

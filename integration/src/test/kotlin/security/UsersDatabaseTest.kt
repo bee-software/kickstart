@@ -47,6 +47,7 @@ class Fixture : DatabaseFixture() {
 
 
 class UsersDatabaseTest : JUnit5Minutests {
+    @Tests
     fun tests() = rootContext<Fixture> {
         given {
             Fixture()
