@@ -9,7 +9,6 @@ import dev.minutest.rootContext
 import dev.minutest.test
 import kickstart.i18n.BundledMessages
 import kickstart.i18n.loadBundle
-import kotlin.test.Test
 import java.util.*
 
 class BundledMessagesTest : JUnit5Minutests {

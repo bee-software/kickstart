@@ -5,7 +5,7 @@ import kickstart.storytelling.browsing.browsingAs
 
 class EnterText(private val text: CharSequence) {
 
-    fun into(target: Target): Action = { actor ->
+    infix fun into(target: Target): Action = { actor ->
         browsingAs(actor).find(target).run {
             clear()
             type(text)

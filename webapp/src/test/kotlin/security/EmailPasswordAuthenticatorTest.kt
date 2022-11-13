@@ -3,8 +3,15 @@ package kickstart.security
 import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
+import com.vtence.konstruct.Provider
+import com.vtence.konstruct.a
+import com.vtence.konstruct.make
+import com.vtence.konstruct.with
 import dev.minutest.*
 import dev.minutest.junit.JUnit5Minutests
+import kickstart.security.UserMaker.password
+import kickstart.security.UserMaker.user
+import kickstart.security.UserMaker.username
 import security.UserThat
 
 
@@ -14,8 +21,8 @@ class EmailPasswordAuthenticatorTest : JUnit5Minutests {
         val authenticator: Authenticator = EmailPasswordAuthenticator(users),
     ) : Authenticator by authenticator {
 
-        fun given(vararg users: User) {
-            users.forEach { this.users.add(it) }
+        fun given(vararg users: Provider<User>) {
+            users.forEach { this.users.add(make(it)) }
         }
     }
 
@@ -34,8 +41,8 @@ class EmailPasswordAuthenticatorTest : JUnit5Minutests {
         context("with existing users") {
             beforeEach {
                 given(
-                    User(Username("other"), PasswordHash.create("secret")),
-                    User(Username("admin"), PasswordHash.create("secret"))
+                    a(user, with(username,"other"), with(password, "secret")),
+                    a(user, with(username,"admin"), with(password, "secret")),
                 )
             }
 

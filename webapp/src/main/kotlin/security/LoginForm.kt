@@ -7,10 +7,9 @@ import kickstart.validation.ValidationResult
 import kickstart.validation.plus
 
 
-class LoginForm(val email: String?, private val password: String?) {
+data class LoginForm(val email: String?, private val password: String?) {
 
-    fun validate(): ValidationResult<Credentials> =
-        login.email.required(email) + login.password.required(password)
+    fun validate(): ValidationResult<Credentials> = login.email.required(email) + login.password.required(password)
 
     companion object {
         fun parse(request: Request): LoginForm {

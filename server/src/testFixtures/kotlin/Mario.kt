@@ -19,4 +19,4 @@ fun <T : Any?> Matcher<T>.asHamcrestMatcher(): org.hamcrest.Matcher<T> {
 }
 
 
-fun WebElementDriver.hasText(matching: Matcher<String>) = hasText(matching.asHamcrestMatcher())
+infix fun WebElementDriver.hasText(matching: Matcher<String>) = hasText(matching.asHamcrestMatcher())

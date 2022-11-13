@@ -8,7 +8,6 @@ import dev.minutest.test
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import java.util.*
-import kotlin.test.Test
 
 class I18nTest : JUnit5Minutests {
     @Tests

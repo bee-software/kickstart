@@ -8,7 +8,6 @@ import dev.minutest.given
 import dev.minutest.junit.JUnit5Minutests
 import dev.minutest.rootContext
 import dev.minutest.test
-import kotlin.test.Test
 
 class CompositeMessagesTest : JUnit5Minutests {
     @Tests

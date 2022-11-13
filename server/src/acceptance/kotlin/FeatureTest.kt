@@ -1,35 +1,52 @@
 package kickstart
 
+import dev.minutest.*
+import dev.minutest.junit.JUnit5Minutests
 import kickstart.models.Identities
+import kickstart.storytelling.Actor
 import kickstart.storytelling.actorAbleTo
 import kickstart.storytelling.browsing.browseTheWebUsing
 import kickstart.tasks.signInAs
 import kickstart.tasks.signOut
 import kickstart.tasks.startUsing
 import kickstart.tasks.stopUsing
-import kotlin.test.*
+import org.junit.platform.commons.annotation.Testable
 
-class FeatureTest {
+@Suppress("MemberVisibilityCanBePrivate", "FunctionName")
+class FeatureTest : JUnit5Minutests {
 
-    val app = App.start()
-    val actor = actorAbleTo(browseTheWebUsing(hisBrowser))
+    class EndUser {
+        val app = App.start()
+        val user = actorAbleTo(browseTheWebUsing(hisBrowser))
 
-    @BeforeTest
-    fun start() {
-        actor.does(startUsing(app))
+        fun Actor.startsUsingApp() {
+            does(startUsing(app))
+        }
+
+        fun Actor.stopsUsingApp() {
+            does(stopUsing(app))
+            app.stop()
+        }
     }
 
-    @AfterTest
-    fun stop() {
-        actor.does(stopUsing(app))
-        app.stop()
-    }
+    @Testable
+    fun test() = rootContext<EndUser> {
+        given { EndUser() }
 
-    @Test
-    fun `example scenario`() {
-        actor.wasAbleTo(
-            signInAs(Identities.bob),
-            signOut()
-        )
+        beforeEach {
+            user.startsUsingApp()
+        }
+
+        afterEach {
+            user.stopsUsingApp()
+        }
+
+        scenario("example") {
+            user.wasAbleTo(
+                signInAs(Identities.bob),
+                //...
+                signOut()
+            )
+        }
     }
 }

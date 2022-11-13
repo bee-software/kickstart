@@ -1,6 +1,5 @@
 package kickstart.pages
 
-import kickstart.storytelling.Target
 import kickstart.storytelling.actions.Action
 import kickstart.storytelling.actions.clickOn
 import kickstart.storytelling.actions.enterText
@@ -9,20 +8,20 @@ import kickstart.storytelling.byName
 import kickstart.storytelling.byTagName
 
 object LoginPage {
-    private val login_form = byCssSelector("form#login")
-    private val email_input = byName("email").within(login_form)
-    private val password_input = byName("password").within(login_form)
-    private val login_button = byTagName("button").within(login_form)
+    private val loginForm = byCssSelector("form#login")
+    private val emailInput = byName("email").within(loginForm)
+    private val passwordInput = byName("password").within(loginForm)
+    private val loginButton = byTagName("button").within(loginForm)
 
     fun enterEmail(email: String): Action {
-        return enterText(email).into(email_input)
+        return enterText(email) into emailInput
     }
 
     fun enterPassword(password: String): Action {
-        return enterText(password).into(password_input)
+        return enterText(password) into passwordInput
     }
 
     fun signIn(): Action {
-        return clickOn(login_button)
+        return clickOn(loginButton)
     }
 }
