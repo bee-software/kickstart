@@ -9,7 +9,9 @@ dependencies {
     implementation(libs.jmustache)
     implementation(libs.kabinet)
     implementation(libs.konfig)
-    implementation(libs.molecule)
+    implementation(libs.molecule) {
+        exclude(module="undertow-core")
+    }
 
     testFixturesApi(libs.skrapeit)
     testFixturesImplementation(libs.molecule)

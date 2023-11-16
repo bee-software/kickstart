@@ -15,7 +15,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":webapp"))
     implementation(libs.konfig)
-    implementation(libs.molecule)
+    implementation(libs.molecule) {
+        exclude(module="undertow-core")
+    }
 
     runtimeOnly(libs.simple)
 

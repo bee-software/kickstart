@@ -20,7 +20,8 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","int"] }]
 },
 {
-  "name":"com.vtence.molecule.servers.UndertowServer"
+  "name":"com.vtence.molecule.servers.UndertowServer",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","int"] }]
 },
 {
   "name":"java.security.SecureRandomParameters"

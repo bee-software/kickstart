@@ -46,7 +46,7 @@ docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "WWW_R
 
 To run the previously built docker image against a Postgres instance in Docker on OSX:
 ````shell
-docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "DB_HOST=docker.for.mac.localhost" -e "WWW_ROOT=/www" bee-software/kickstart 
+docker run -p 8080:8080 -e "SERVER_PORT=8080" -e "SERVER_HOST=0.0.0.0" -e "DB_HOST=host.docker.internal" -e "WWW_ROOT=/www" bee-software/kickstart 
 ````
 
 You can now sign in at `http://localhost:8080` with `guest/password`.
