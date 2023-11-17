@@ -42,7 +42,7 @@ object Browser {
     }
 
     fun chrome(options: Configuration): WebDriver = ChromeDriver(ChromeOptions().apply {
-        setHeadless(options[selenium.chrome.headless])
+        if (options[selenium.chrome.headless]) addArguments("--headless=new")
     })
 
     fun remote(options: Configuration): WebDriver {
